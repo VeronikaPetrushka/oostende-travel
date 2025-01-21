@@ -24,41 +24,41 @@ const Menu = () => {
     return (
         <View style={styles.container}>
 
-            <View style={styles.btnContainer}>
                 <TouchableOpacity 
-                    style={[styles.button, activeButton === 'PlacesScreen' && styles.activeBtn]} 
-                    onPress={() => handleNavigate('PlacesScreen')}>
-                    <Icons type={'1'} active={activeButton === 'PlacesScreen'}/>
-                    {activeButton === 'PlacesScreen' && <Text>Places</Text> }
+                    style={[styles.button, activeButton === 'HomeScreen' && styles.activeBtn]} 
+                    onPress={() => handleNavigate('HomeScreen')}>
+                    <View style={{width: 24, height: 24}}>
+                        <Icons type={'1'} active={activeButton === 'HomeScreen'}/>
+                    </View>
+                    {activeButton === 'HomeScreen' && <Text style={styles.activeBtnText}>Places</Text>}
                 </TouchableOpacity>
-            </View>
 
-            <View style={styles.btnContainer}>
                 <TouchableOpacity 
                     style={[styles.button, activeButton === 'TicketsScreen' && styles.activeBtn]} 
                     onPress={() => handleNavigate('TicketsScreen')}>
-                    <Icons type={'2'} active={activeButton === 'TicketsScreen'}/>
-                    {activeButton === 'TicketsScreen' && <Text>Tickets</Text> }
+                    <View style={{width: 24, height: 24}}>
+                        <Icons type={'2'} active={activeButton === 'TicketsScreen'}/>
+                    </View>
+                    {activeButton === 'TicketsScreen' && <Text style={styles.activeBtnText}>Tickets</Text>}
                 </TouchableOpacity>
-            </View>
 
-            <View style={styles.btnContainer}>
                 <TouchableOpacity 
                     style={[styles.button, activeButton === 'GameScreen' && styles.activeBtn]} 
                     onPress={() => handleNavigate('GameScreen')}>
-                    <Icons type={'4'} active={activeButton === 'GameScreen'}/>
-                    {activeButton === 'GameScreen' && <Text>Game</Text> }
+                    <View style={{width: 24, height: 24}}>
+                        <Icons type={'3'} active={activeButton === 'GameScreen'}/>
+                    </View>
+                    {activeButton === 'GameScreen' && <Text style={styles.activeBtnText}>Game</Text>}
                 </TouchableOpacity>
-            </View>
 
-            <View style={styles.btnContainer}>
                 <TouchableOpacity 
                     style={[styles.button, activeButton === 'ProfileScreen' && styles.activeBtn]} 
                     onPress={() => handleNavigate('ProfileScreen')}>
-                    <Icons type={'5'} active={activeButton === 'ProfileScreen'}/>
-                    {activeButton === 'ProfileScreen' && <Text>Profile</Text> }
+                    <View style={{width: 24, height: 24}}>
+                        <Icons type={'4'} active={activeButton === 'ProfileScreen'}/>
+                    </View>
+                    {activeButton === 'ProfileScreen' && <Text style={styles.activeBtnText}>Profile</Text>}
                 </TouchableOpacity>
-            </View>
 
         </View>
     );
@@ -66,15 +66,13 @@ const Menu = () => {
 
 const styles = StyleSheet.create({
     container: {
-        width: 290,
-        justifyContent: "space-around",
+        width: 350,
+        justifyContent: "space-between",
         alignItems: "center",
-        paddingHorizontal: 20,
-        height: 62,
+        padding: 8,
+        height: 56,
         flexDirection: 'row',
-        backgroundColor: '#ff6059',
-        borderWidth: 1,
-        borderColor: '#fff',
+        backgroundColor: '#fff',
         borderRadius: 100,
         alignSelf: "center",
     },
@@ -90,12 +88,24 @@ const styles = StyleSheet.create({
         padding: 5
     },
 
-    addBtn: {
-        width: 80,
-        height: 80,
-        padding: 19,
-        backgroundColor: '#fff',
+    activeBtn: {
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        backgroundColor: '#ffdc00',
         borderRadius: 100,
+        width: 'auto',
+        height: 'auto',
+    },
+
+    activeBtnText: {
+        color: '#000',
+        fontSize: 11,
+        marginLeft: 4,
+        fontWeight: '700',
+        lineHeight: 15
     }
 });
 

@@ -3,12 +3,11 @@ import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
-import places from '../constants/places';
 import Icons from "./Icons";
 
 const { height } = Dimensions.get('window');
 
-const Home = () => {
+const Favorites = () => {
     const navigation = useNavigation();
     const [button, setButton] = useState('map');
     const [favorites, setFavorites] = useState([]);
@@ -62,9 +61,9 @@ const Home = () => {
 
             <View style={{width: '100%', alignItems: 'center', paddingHorizontal: 16}}>
                 <View style={styles.upperPanel}>
-                    <Text style={styles.upperText}>Oostende Travel</Text>
-                    <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FavoritesScreen')}>
-                        <Icons type={'fav'} />
+                    <Text style={styles.upperText}>Your Favorites</Text>
+                    <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack('')}>
+                        <Icons type={'back'} />
                     </TouchableOpacity>
                 </View>
 
@@ -90,7 +89,7 @@ const Home = () => {
                                 longitudeDelta: 0.05,
                             }}
                         >
-                            {places.map((place, index) => (
+                            {favorites.map((place, index) => (
                                 <Marker
                                     key={index}
                                     coordinate={{
@@ -109,7 +108,7 @@ const Home = () => {
                             ))}
                         </MapView>
                         {selectedPlace && (
-                            <View style={[styles.placeCard, {position: 'absolute', bottom: 100, width: '91%', left: 16}]}>
+                            <View style={[styles.placeCard, {position: 'absolute', bottom: 16, width: '91%', left: 16}]}>
                                 <Image source={selectedPlace.image} style={styles.placeImage} />
                                 <Text style={styles.placeName}>{selectedPlace.name}</Text>
                                 <Text style={styles.placeDesc} numberOfLines={2}>{selectedPlace.description[0]}</Text>
@@ -125,7 +124,7 @@ const Home = () => {
                 ) : (
                     <ScrollView style={{width: '100%', padding: 16, backgroundColor: '#ececec'}}>
                         {
-                            places.map((place, index) => (
+                            favorites.map((place, index) => (
                                 <View key={index} style={styles.placeCard}>
                                     <Image source={place.image} style={styles.placeImage} />
                                     <Text style={styles.placeName}>{place.name}</Text>
@@ -171,10 +170,10 @@ const styles = StyleSheet.create({
         lineHeight: 33.41
     },
 
-    favIcon: {
-        width: 47,
-        height: 44,
-        padding: 11,
+    backIcon: {
+        width: 44,
+        height: 47,
+        padding: 12,
         borderRadius: 12,
         backgroundColor: '#ffcc02'
     },
@@ -262,4 +261,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Home;
+export default Favorites;

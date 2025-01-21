@@ -1,14 +1,14 @@
 import { View } from "react-native"
 import Home from "../components/Home"
-// import Menu from "../components/Menu";
+import Menu from "../components/Menu";
 
 const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <Home />
-            {/* <View style={styles.menu}>
+            <View style={styles.menu}>
                 <Menu />
-            </View> */}
+            </View>
         </View>
     )
 }; 
@@ -20,7 +20,7 @@ const styles = {
     },
     menu: {
         position: 'absolute',
-        bottom: 50,
+        bottom: 40,
         left: 0,
         right: 0
     }

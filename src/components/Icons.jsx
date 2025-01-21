@@ -23,6 +23,21 @@ const Icons = ({ type, active }) => {
       imageSource = require('../assets/panel/4.png');
       if (active) iconStyle.push(styles.active);
       break;
+    case 'fav':
+      imageSource = require('../assets/icons/fav.png');
+      break;
+    case 'fav-not':
+      imageSource = require('../assets/icons/fav-not.png');
+      break;
+    case 'fav-saved':
+      imageSource = require('../assets/icons/fav-saved.png');
+      break;
+    case 'back':
+      imageSource = require('../assets/icons/back.png');
+      break;
+    case 'pin':
+      imageSource = require('../assets/icons/pin.png');
+      break;
   }
 
   return (
