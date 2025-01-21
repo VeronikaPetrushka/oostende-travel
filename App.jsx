@@ -1,118 +1,77 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useState, useEffect, useRef } from 'react';
+import { Animated, View, ImageBackground, StyleSheet } from 'react-native';
+import { enableScreens } from 'react-native-screens';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import HomeScreen from './src/screens/HomeScreen';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+enableScreens();
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+const Stack = createStackNavigator();
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+const App = () => {
+    const [loaderIsEnded, setLoaderIsEnded] = useState(false);
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+    const loaderAnim = useRef(new Animated.Value(0)).current;
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+    const firstLoaderImage = require('./src/assets/loaders/1.png');
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
+    const [currentLoader, setCurrentLoader] = useState(firstLoaderImage);
+    
+    useEffect(() => {
+        Animated.timing(loaderAnim, {
+            toValue: 1,
+            duration: 1500,
+            useNativeDriver: true,
+        }).start(() => {
+                    setLoaderIsEnded(true);
+                });
+    }, []);
+    
+    return (
+      <NavigationContainer>
+        {
+            !loaderIsEnded ? (
+                <View style={{ flex: 1 }}>
+                    <ImageBackground style={{ flex: 1 }} source={currentLoader}>
+                        <View style={styles.container}>
+                            <Animated.View style={[styles.imageContainer, { opacity: loaderAnim }]}>
+                                <ImageBackground source={currentLoader} style={styles.image} />
+                            </Animated.View>
+                        </View>
+                    </ImageBackground>
+                </View>
+            ) : (
+              <Stack.Navigator initialRouteName="HomeScreen">
+                  <Stack.Screen 
+                      name="HomeScreen" 
+                      component={HomeScreen} 
+                      options={{ headerShown: false }} 
+                  />
+              </Stack.Navigator>
+            )
+        }
+      </NavigationContainer>
+    );
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    imageContainer: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+    },
 });
 
 export default App;
