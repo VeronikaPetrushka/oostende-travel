@@ -7,6 +7,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './src/screens/HomeScreen';
 import DetailsScreen from './src/screens/DetailsScreen';
 import FavoritesScreen from './src/screens/FavoritesScreen';
+import TicketsScreen from './src/screens/TicketsScreen';
+import AddFlightScreen from './src/screens/AddFlightScreen';
+import AddHotelScreen from './src/screens/AddHotelScreen';
+import AddEventScreen from './src/screens/AddEventScreen';
 
 enableScreens();
 
@@ -59,6 +63,26 @@ const App = () => {
                   <Stack.Screen 
                       name="FavoritesScreen" 
                       component={FavoritesScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="TicketsScreen" 
+                      component={TicketsScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="AddFlightScreen" 
+                      component={AddFlightScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="AddHotelScreen" 
+                      component={AddHotelScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="AddEventScreen" 
+                      component={AddEventScreen} 
                       options={{ headerShown: false }} 
                   />
               </Stack.Navigator>

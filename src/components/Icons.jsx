@@ -38,6 +38,24 @@ const Icons = ({ type, active }) => {
     case 'pin':
       imageSource = require('../assets/icons/pin.png');
       break;
+    case 'calendar':
+      imageSource = require('../assets/icons/calendar.png');
+      break;
+    case 'plus':
+      imageSource = require('../assets/icons/plus.png');
+      break;
+    case 'cross':
+      imageSource = require('../assets/icons/cross.png');
+      break;
+    case 'minus':
+      imageSource = require('../assets/icons/minus.png');
+      break;
+    case 'add':
+      imageSource = require('../assets/icons/add.png');
+      break;
+    case 'time':
+      imageSource = require('../assets/icons/time.png');
+      break;
   }
 
   return (

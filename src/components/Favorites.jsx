@@ -164,8 +164,8 @@ const styles = StyleSheet.create({
     },
 
     upperText: {
-        fontSize: 28,
-        fontWeight: '900',
+        fontSize: 27,
+        fontWeight: '800',
         color: '#000',
         lineHeight: 33.41
     },
