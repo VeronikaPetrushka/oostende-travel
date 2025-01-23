@@ -5,7 +5,7 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Calendar } from 'react-native-calendars';
 import Icons from "./Icons";
 
-const { height } = Dimensions.get('window');
+const { height, width } = Dimensions.get('window');
 
 const FavTickets = () => {
     const navigation = useNavigation();
@@ -63,7 +63,27 @@ const FavTickets = () => {
     const cancelFilter = () => {
         setDate(null);
         setCalendar(false);
-    };    
+    };   
+    
+    // fix filter
+
+    const filteredByDate = date
+    ? filteredData.filter(item => {
+        if (button === 'Flights') {
+            const flightDate = new Date(item.arrivalDate);
+            return flightDate.toDateString() === date.toDateString();
+        } else if (button === 'Hotels') {
+            const hotelDate = new Date(item.arrivalDate);
+            return hotelDate.toDateString() === date.toDateString();
+        } else if (button === 'Events') {
+            const eventDate = new Date(item.date);
+            return eventDate.toDateString() === date.toDateString();
+        }
+        return false;
+    })
+    : filteredData;
+
+    console.log(filteredByDate)
 
     const handleMoreInfoHotel = (index) => {
         setMoreInfoHotel((prevIndex) => (prevIndex === index ? null : index));
@@ -249,15 +269,15 @@ const FavTickets = () => {
                     </View>
                 ) : (
                     <ScrollView style={{ width: '100%', padding: 16, backgroundColor: '#ececec' }}>
-                        {filteredData.map((item, index) =>
+                        {filteredByDate.map((item, index) =>
                             button === 'Hotels'
                                 ? renderHotels(item, index)
                                 : renderEvents(item, index)
                         )}
                         {
-                            filteredData.length === 0 && (
-                                <View style={{width: '100%', marginTop: 150, alignItems: 'center'}}>
-                                    <Image source={'../assets/nothing.png'} style={{width: 120, height: 120, marginBottom: 24}} />
+                            filteredByDate.length === 0 && (
+                                <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
+                                    <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24}} />
                                     <Text style={styles.nothingText}>{`There aren’t any ${button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
                                 </View>
                             )
@@ -500,7 +520,20 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: '#999',
         lineHeight: 14.32
-    }
+    },
+
+    resetBtn: {
+        paddingVertical: 7,
+        paddingHorizontal: 40,
+        borderRadius: 100,
+        backgroundColor: '#ffcc02',
+    },
+
+    resetBtnText: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#000'
+    },
 
 })
 

@@ -455,8 +455,7 @@ const Tickets = () => {
                         {
                             filteredByDate.length === 0 && (
                                 <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
-                                    {/* image does not render */}
-                                    <Image source={'../assets/nothing.png'} style={{width: 120, height: 120, marginBottom: 24, resizeMode: 'contain'}} />
+                                    <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24, resizeMode: 'contain'}} />
                                     <Text style={styles.nothingText}>{`There aren’t any ${button === 'Flights' ? 'flights' : button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
                                 </View>
                             )

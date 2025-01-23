@@ -12,6 +12,8 @@ import AddFlightScreen from './src/screens/AddFlightScreen';
 import AddHotelScreen from './src/screens/AddHotelScreen';
 import AddEventScreen from './src/screens/AddEventScreen';
 import FavTicketsScreen from './src/screens/FavTicketsScreen';
+import LevelsScreen from './src/screens/LevelsScreen';
+import GameScreen from './src/screens/GameScreen';
 
 enableScreens();
 
@@ -89,6 +91,16 @@ const App = () => {
                   <Stack.Screen 
                       name="FavTicketsScreen" 
                       component={FavTicketsScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="LevelsScreen" 
+                      component={LevelsScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="GameScreen" 
+                      component={GameScreen} 
                       options={{ headerShown: false }} 
                   />
               </Stack.Navigator>

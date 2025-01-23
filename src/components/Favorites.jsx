@@ -138,6 +138,14 @@ const Favorites = () => {
                                 </View>
                             ))
                         }
+                        {
+                            favorites.length === 0 && (
+                                <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
+                                    <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24}} />
+                                    <Text style={styles.nothingText}>{`There aren’t any places you add yet, you can do it now`}</Text>
+                                </View>
+                            )
+                        }
                         <View style={{height: 120}} />
                     </ScrollView>
                 )
@@ -256,8 +264,14 @@ const styles = StyleSheet.create({
     mapContainer: {
         width: '100%',
         height: '82%'
-    }
+    },
 
+    nothingText: {
+        fontSize: 16,
+        color: '#000',
+        textAlign: 'center',
+        fontWeight: '400'
+    },
 
 })
 
