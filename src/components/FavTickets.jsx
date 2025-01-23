@@ -5,37 +5,19 @@ import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Calendar } from 'react-native-calendars';
 import Icons from "./Icons";
 
-const { height, width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
-const Tickets = () => {
+const FavTickets = () => {
     const navigation = useNavigation();
-    const [button, setButton] = useState('Flights');
+    const [button, setButton] = useState('Hotels');
     const [calendar, setCalendar] = useState(false);
-    const [data, setData] = useState({ hotels: [], flights: [], events: [] });
     const [filteredData, setFilteredData] = useState([]);
     const [date, setDate] = useState(null);
 
     const [favHotels, setFavHotels] = useState([]);
     const [favEvents, setFavEvents] = useState([]);
 
-    const [moreInfoFlight, setMoreInfoFlight] = useState(null);
     const [moreInfoHotel, setMoreInfoHotel] = useState(false);
-
-    const fetchData = async () => {
-        try {
-            const hotels = await AsyncStorage.getItem('hotels');
-            const flights = await AsyncStorage.getItem('flights');
-            const events = await AsyncStorage.getItem('events');
-
-            setData({
-                hotels: hotels ? JSON.parse(hotels) : [],
-                flights: flights ? JSON.parse(flights) : [],
-                events: events ? JSON.parse(events) : [],
-            });
-        } catch (error) {
-            console.error('Error retrieving data:', error);
-        }
-    };
 
     const fetchFavorites = async () => {
         const hotels = await getFavorites('favHotels');
@@ -46,36 +28,42 @@ const Tickets = () => {
 
     useFocusEffect(
         useCallback(() => {
-            fetchData();
             fetchFavorites();
         }, [])
-    );
+    );    
+
+    console.log('favHotels:', favHotels);
+    console.log('favEvents:', favEvents);
+    console.log('filteredData:', filteredData);
 
     useEffect(() => {
-        if (button === 'Flights') {
-            setFilteredData(data.flights);
-        } else if (button === 'Hotels') {
-            setFilteredData(data.hotels);
+        if (button === 'Hotels') {
+            setFilteredData(favHotels);
         } else if (button === 'Events') {
-            setFilteredData(data.events);
+            setFilteredData(favEvents);
         }
-    }, [button, data]);
+    }, [button, favHotels, favEvents]);    
 
     console.log('filteredData: ', filteredData)
 
-    const handleAddItem = () => {
-        if(button === 'Flights') {
-            navigation.navigate('AddFlightScreen')
-        } else if (button === 'Hotels') {
-            navigation.navigate('AddHotelScreen')
-        } else if (button === 'Events') {
-            navigation.navigate('AddEventScreen')
+    const handleCalendar = () => {
+        if(calendar) {
+            setCalendar(false);
+        } else {
+            setCalendar(true);
         }
     };
 
-    const handleMoreInfoFlight = (index) => {
-        setMoreInfoFlight((prevIndex) => (prevIndex === index ? null : index));
+    const handleDayPress = (day) => {
+        const selectedDate = new Date(day.dateString);
+        setDate(selectedDate);
+        setCalendar(false);
     };
+    
+    const cancelFilter = () => {
+        setDate(null);
+        setCalendar(false);
+    };    
 
     const handleMoreInfoHotel = (index) => {
         setMoreInfoHotel((prevIndex) => (prevIndex === index ? null : index));
@@ -118,47 +106,6 @@ const Tickets = () => {
             console.error('Error updating favorites:', error);
         }
     };    
-
-    // DATE FILTERS
-
-    const handleCalendar = () => {
-        if(calendar) {
-            setCalendar(false);
-        } else {
-            setCalendar(true);
-        }
-    };
-
-    const handleDayPress = (day) => {
-        const selectedDate = new Date(day.dateString);
-        setDate(selectedDate);
-        setCalendar(false);
-    };
-    
-    const cancelFilter = () => {
-        setDate(null);
-        setCalendar(false);
-    };    
-
-    // fix filter to match
-
-    const filteredByDate = date
-    ? filteredData.filter(item => {
-        if (button === 'Flights') {
-            const flightDate = new Date(item.arrivalDate);
-            return flightDate.toDateString() === date.toDateString();
-        } else if (button === 'Hotels') {
-            const hotelDate = new Date(item.arrivalDate);
-            return hotelDate.toDateString() === date.toDateString();
-        } else if (button === 'Events') {
-            const eventDate = new Date(item.date);
-            return eventDate.toDateString() === date.toDateString();
-        }
-        return false;
-    })
-    : filteredData;
-
-    console.log(filteredByDate)
 
     // RENDER ITEMS
 
@@ -217,64 +164,6 @@ const Tickets = () => {
         </View>
     );
 
-    const renderFlights = (flight, index) => (
-        <View key={`flight-${index}`} style={styles.flightCard}>
-            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 12}}>
-                <View style={{width: '70%', alignItems: 'center', flexDirection: 'row'}}>
-                    <Text style={[styles.flightDate, {marginRight: 10}]}>{flight.departureDate}</Text>
-                    <Text style={styles.flightDate}>{flight.departureTime}</Text>
-                </View>
-                <Text style={styles.flightClass}>{flight.classChosen}</Text>
-            </View>
-
-            <View style={{width: '100%', alignItems: 'flex-end', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16}}>
-                <View style={{alignItems: 'flex-start', width: '70%'}}>
-                    <View style={{width: '100%', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', marginBottom: 20}}>
-                        <Text style={styles.flightPoint}>A</Text>
-                        <Text style={styles.flightDate} numberOfLines={1} ellipsizeMode='tail'>{flight.departure}</Text>
-                    </View>
-                    <View style={styles.flightLine} />
-                    <View style={{width: '100%', alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row'}}>
-                        <Text style={[styles.flightPoint, {backgroundColor: '#ececec'}]}>B</Text>
-                        <Text style={styles.flightDate} numberOfLines={1} ellipsizeMode='tail'>{flight.arrival}</Text>
-                    </View>
-                </View>
-                <Text style={styles.flightCost}>{flight.cost} $</Text>
-            </View>
-
-            <View style={[styles.moreInfoContainer, {padding: 0, marginBottom: 12}]}>
-                <Text style={styles.moreInfoText}>Additional information</Text>
-                <TouchableOpacity style={{width: 14, height: 12}} onPress={() => handleMoreInfoFlight(index)}>
-                    <Icons type={moreInfoFlight === index ? 'less' : 'more'} />
-                </TouchableOpacity>
-            </View>
-
-            {
-                moreInfoFlight === index && (
-                    <View style={{width: '100%'}}>
-                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexDirection: 'row'}}>
-                            <Text style={[styles.hotelSubTitle, {fontWeight: '700'}]}>On the way</Text>
-                            <Text style={styles.hotelSubTitle}>{flight.duration}</Text>
-                        </View>
-
-                        <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexDirection: 'row'}}>
-                            <Text style={[styles.hotelSubTitle, {fontWeight: '700'}]}>Passengers</Text>
-                            <Text style={styles.hotelSubTitle}>{flight.passengers}</Text>
-                        </View>
-
-                        {flight.comment && (
-                            <View style={{width: '100%'}}>
-                                <Text style={[styles.hotelSubTitle, {fontWeight: '700', marginBottom: 12}]}>Comment</Text>
-                                <Text style={styles.hotelSubTitle}>{flight.comment}</Text>
-                            </View>
-                        )}
-                    </View>
-                )
-            }
-
-        </View>
-    );
-
     const renderEvents = (event, index) => (
         <View key={`event-${index}`} style={styles.hotelCard}>
             <Image source={{uri: event.cover}} style={styles.hotelCover} />
@@ -307,21 +196,18 @@ const Tickets = () => {
 
             <View style={{width: '100%', alignItems: 'center', paddingHorizontal: 16}}>
                 <View style={styles.upperPanel}>
-                    <Text style={styles.upperText}>Oostende Travel</Text>
+                    <Text style={styles.upperText}>Your Favorites</Text>
                     <View style={{alignItems: 'center', flexDirection: 'row'}}>
                         <TouchableOpacity style={styles.calendarIcon} onPress={handleCalendar}>
                             <Icons type={'calendar'} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FavTicketsScreen')}>
-                            <Icons type={'fav'} />
+                        <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack('')}>
+                            <Icons type={'back'} />
                         </TouchableOpacity>
                     </View>
                 </View>
 
                 <View style={styles.toolsContainer}>
-                    <TouchableOpacity style={[styles.toolBtn, button === 'Flights' && {backgroundColor: '#ffcc02'}]} onPress={() => setButton('Flights')}>
-                        <Text style={styles.toolBtnText}>Flights</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity style={[styles.toolBtn, button === 'Hotels' && {backgroundColor: '#ffcc02'}]}  onPress={() => setButton('Hotels')}>
                         <Text style={styles.toolBtnText}>Hotels</Text>
                     </TouchableOpacity>
@@ -335,7 +221,7 @@ const Tickets = () => {
                 calendar ? (
                     <View style={{width: '100%', alignItems: 'center'}}>
                         <Calendar
-                            style={{ width: width * 0.88, borderRadius: 16, backgroundColor: '#fff', overflow: 'hidden', padding: 5}}
+                            style={{ width: width * 0.88, borderRadius: 16, backgroundColor: '#f6f6f6', overflow: 'hidden', padding: 5}}
                                             onDayPress={handleDayPress}
                                             markedDates={
                                                 date
@@ -363,19 +249,16 @@ const Tickets = () => {
                     </View>
                 ) : (
                     <ScrollView style={{ width: '100%', padding: 16, backgroundColor: '#ececec' }}>
-                        {filteredByDate.map((item, index) =>
-                            button === 'Flights'
-                                ? renderFlights(item, index)
-                                : button === 'Hotels'
+                        {filteredData.map((item, index) =>
+                            button === 'Hotels'
                                 ? renderHotels(item, index)
                                 : renderEvents(item, index)
                         )}
                         {
-                            filteredByDate.length === 0 && (
-                                <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
-                                    {/* image does not render */}
-                                    <Image source={'../assets/nothing.png'} style={{width: 120, height: 120, marginBottom: 24, resizeMode: 'contain'}} />
-                                    <Text style={styles.nothingText}>{`There aren’t any ${button === 'Flights' ? 'flights' : button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
+                            filteredData.length === 0 && (
+                                <View style={{width: '100%', marginTop: 150, alignItems: 'center'}}>
+                                    <Image source={'../assets/nothing.png'} style={{width: 120, height: 120, marginBottom: 24}} />
+                                    <Text style={styles.nothingText}>{`There aren’t any ${button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
                                 </View>
                             )
                         }
@@ -383,10 +266,6 @@ const Tickets = () => {
                     </ScrollView>
                 )
             }
-
-            <TouchableOpacity style={styles.addBtn} onPress={handleAddItem}>
-                <Icons type={'plus'} />
-            </TouchableOpacity>
 
         </View>
     )
@@ -432,10 +311,10 @@ const styles = StyleSheet.create({
         shadowRadius: 2,
     },
 
-    favIcon: {
-        width: 47,
-        height: 44,
-        padding: 11,
+    backIcon: {
+        width: 44,
+        height: 47,
+        padding: 12,
         borderRadius: 12,
         backgroundColor: '#ffcc02'
     },
@@ -452,7 +331,7 @@ const styles = StyleSheet.create({
     },
 
     toolBtn: {
-        width: '33.33%',
+        width: '50%',
         padding: 9,
         alignItems: 'center',
         justifyContent: 'center',
@@ -621,21 +500,8 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: '#999',
         lineHeight: 14.32
-    },
-
-    resetBtn: {
-        paddingVertical: 7,
-        paddingHorizontal: 40,
-        borderRadius: 100,
-        backgroundColor: '#ffcc02',
-    },
-
-    resetBtnText: {
-        fontSize: 14,
-        fontWeight: '700',
-        color: '#000'
     }
 
 })
 
-export default Tickets;
+export default FavTickets;
