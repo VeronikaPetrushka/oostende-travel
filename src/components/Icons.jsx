@@ -71,6 +71,9 @@ const Icons = ({ type, active }) => {
     case 'locked':
       imageSource = require('../assets/icons/locked.png');
       break;
+    case 'policy':
+      imageSource = require('../assets/icons/policy.png');
+      break;
   }
 
   return (

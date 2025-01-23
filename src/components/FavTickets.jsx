@@ -56,7 +56,14 @@ const FavTickets = () => {
 
     const handleDayPress = (day) => {
         const selectedDate = new Date(day.dateString);
-        setDate(selectedDate);
+    
+        const dayOfMonth = selectedDate.getDate().toString().padStart(2, '0');
+        const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
+        const year = selectedDate.getFullYear();
+    
+        const formattedDate = `${dayOfMonth}.${month}.${year}`;
+    
+        setDate(formattedDate);
         setCalendar(false);
     };
     
@@ -65,25 +72,26 @@ const FavTickets = () => {
         setCalendar(false);
     };   
     
-    // fix filter
-
     const filteredByDate = date
     ? filteredData.filter(item => {
         if (button === 'Flights') {
-            const flightDate = new Date(item.arrivalDate);
-            return flightDate.toDateString() === date.toDateString();
+            const flightDate = item.arrivalDate;
+            console.log(flightDate)
+            return flightDate === date;
         } else if (button === 'Hotels') {
-            const hotelDate = new Date(item.arrivalDate);
-            return hotelDate.toDateString() === date.toDateString();
+            const hotelDate = item.arrivalDate;
+            return hotelDate === date;
         } else if (button === 'Events') {
-            const eventDate = new Date(item.date);
-            return eventDate.toDateString() === date.toDateString();
+            const eventDate = item.date;
+            return eventDate === date;
         }
         return false;
     })
     : filteredData;
 
-    console.log(filteredByDate)
+    console.log('date: ', date)
+
+    console.log('filteredByDate: ', filteredByDate)
 
     const handleMoreInfoHotel = (index) => {
         setMoreInfoHotel((prevIndex) => (prevIndex === index ? null : index));
@@ -245,7 +253,7 @@ const FavTickets = () => {
                                             onDayPress={handleDayPress}
                                             markedDates={
                                                 date
-                                                    ? { [date.toISOString().split('T')[0]]: { selected: true, selectedColor: '#ffcc02' } }
+                                                    ? { date: { selected: true, selectedColor: '#ffcc02' } }
                                                     : {}
                                             }
                             theme={{

@@ -14,6 +14,7 @@ import AddEventScreen from './src/screens/AddEventScreen';
 import FavTicketsScreen from './src/screens/FavTicketsScreen';
 import LevelsScreen from './src/screens/LevelsScreen';
 import GameScreen from './src/screens/GameScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 
 enableScreens();
 
@@ -101,6 +102,11 @@ const App = () => {
                   <Stack.Screen 
                       name="GameScreen" 
                       component={GameScreen} 
+                      options={{ headerShown: false }} 
+                  />
+                  <Stack.Screen 
+                      name="ProfileScreen" 
+                      component={ProfileScreen} 
                       options={{ headerShown: false }} 
                   />
               </Stack.Navigator>

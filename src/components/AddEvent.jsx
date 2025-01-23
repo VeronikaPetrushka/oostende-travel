@@ -47,14 +47,10 @@ const AddEvent = ({ event }) => {
             }
     
             const day = selectedDate.getDate().toString().padStart(2, '0');
-            const monthNames = [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-            const month = monthNames[selectedDate.getMonth()];
+            const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
             const year = selectedDate.getFullYear();
     
-            const formattedDate = `${month} ${day}, ${year}`;
+            const formattedDate = `${day}.${month}.${year}`;
 
             setDate(formattedDate)
 
@@ -100,10 +96,11 @@ const AddEvent = ({ event }) => {
             let events = existingEvents ? JSON.parse(existingEvents) : [];
     
             if (event) {
-                const updatedEvents = events.map(e => 
-                    e === event ? { ...e, ...newEvent } : e
-                );
-                events = updatedEvents;
+                const eventIndex = events.findIndex(e => e.name === event.name);
+            
+                if (eventIndex !== -1) {
+                    events[eventIndex] = { ...events[eventIndex], ...newEvent };
+                }
             } else {
                 events.push(newEvent);
             }

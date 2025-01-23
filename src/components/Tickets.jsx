@@ -131,54 +131,64 @@ const Tickets = () => {
 
     const handleDayPress = (day) => {
         const selectedDate = new Date(day.dateString);
-        setDate(selectedDate);
+    
+        const dayOfMonth = selectedDate.getDate().toString().padStart(2, '0');
+        const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
+        const year = selectedDate.getFullYear();
+    
+        const formattedDate = `${dayOfMonth}.${month}.${year}`;
+    
+        setDate(formattedDate);
         setCalendar(false);
     };
+    
     
     const cancelFilter = () => {
         setDate(null);
         setCalendar(false);
     };    
 
-    // fix filter to match
-
     const filteredByDate = date
     ? filteredData.filter(item => {
         if (button === 'Flights') {
-            const flightDate = new Date(item.arrivalDate);
-            return flightDate.toDateString() === date.toDateString();
+            const flightDate = item.arrivalDate;
+            console.log(flightDate)
+            return flightDate === date;
         } else if (button === 'Hotels') {
-            const hotelDate = new Date(item.arrivalDate);
-            return hotelDate.toDateString() === date.toDateString();
+            const hotelDate = item.arrivalDate;
+            return hotelDate === date;
         } else if (button === 'Events') {
-            const eventDate = new Date(item.date);
-            return eventDate.toDateString() === date.toDateString();
+            const eventDate = item.date;
+            return eventDate === date;
         }
         return false;
     })
     : filteredData;
 
-    console.log(filteredByDate)
+    console.log('date: ', date)
+
+    console.log('filteredByDate: ', filteredByDate)
 
     // DOTS LOGIC
 
     const [dotsModalVisible, setDotsModalVisible] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedItemToDelete, setSelectedItemToDelete] = useState(null);
-    const [itemToDelete, setItemToDelete] = useState(null);
+    const [itemToEdit, setIdemToEdit] = useState(null);
 
-    const handleDeleteDots = () => {
+    const handleDeleteDots = async () => {
         setDotsModalVisible(false);
         setModalVisible(true);
     };
 
     const handleItemSelection = (item) => {
-        setItemToDelete(item);
+        setIdemToEdit(item);
         setSelectedItemToDelete(item);
         setDotsModalVisible(true)
     }
     
     const deleteItem = async () => {
+        console.log('selectedItemToDelete: ', selectedItemToDelete)
         if (selectedItemToDelete) {
             try {
                 if (button === 'Flights') {
@@ -218,13 +228,13 @@ const Tickets = () => {
     const handleEdit = () => {
         setDotsModalVisible(false);
         if (button === 'Flights') {
-            navigation.navigate('AddFlightScreen', { flight: data.flights[selectedItemToDelete] });
+            navigation.navigate('AddFlightScreen', { flight: data.flights[itemToEdit] });
         } else if (button === 'Hotels') {
-            navigation.navigate('AddHotelScreen', { hotel: data.hotels[selectedItemToDelete] });
+            navigation.navigate('AddHotelScreen', { hotel: data.hotels[itemToEdit] });
         } else if (button === 'Events') {
-            navigation.navigate('AddEventScreen', { event: data.events[selectedItemToDelete] });
+            navigation.navigate('AddEventScreen', { event: data.events[itemToEdit] });
         }
-        console.log(`Navigating to edit screen for ${button.toLowerCase()} with item:`, data[button.toLowerCase()][selectedItemToDelete]);
+        console.log(`Navigating to edit screen for ${button.toLowerCase()} with item:`, data[button.toLowerCase()][itemToEdit]);
     };
     
     // RENDER ITEMS
@@ -421,7 +431,7 @@ const Tickets = () => {
                                             onDayPress={handleDayPress}
                                             markedDates={
                                                 date
-                                                    ? { [date.toISOString().split('T')[0]]: { selected: true, selectedColor: '#ffcc02' } }
+                                                    ? { date: { selected: true, selectedColor: '#ffcc02' } }
                                                     : {}
                                             }
                             theme={{
@@ -826,7 +836,7 @@ const styles = StyleSheet.create({
         padding: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#ffcc02',
         borderRadius: 14,
     },
 

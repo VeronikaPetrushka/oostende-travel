@@ -12,7 +12,7 @@ const AddFlight = ({ flight }) => {
     const [departure, setDeparture] = useState(flight ? flight.departure : '');
     const [arrival, setArrival] = useState(flight ? flight.arrival : '');
     const [passengers, setPassengers] = useState(flight ? flight.passengers : 1);
-    const [classChosen, setClassChosen] = useState(flight ? flight.category : 'Economy');
+    const [classChosen, setClassChosen] = useState(flight ? flight.classChosen : 'Economy');
     const [departureDate, setDepartureDate] = useState(flight ? flight.departureDate : '');
     const [departureTime, setDepartureTime] = useState(flight ? flight.departureTime : '');
     const [arrivalDate, setArrivalDate] = useState(flight ? flight.arrivalDate : '');
@@ -73,14 +73,10 @@ const AddFlight = ({ flight }) => {
             }
     
             const day = selectedDate.getDate().toString().padStart(2, '0');
-            const monthNames = [
-                "January", "February", "March", "April", "May", "June",
-                "July", "August", "September", "October", "November", "December"
-            ];
-            const month = monthNames[selectedDate.getMonth()];
+            const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
             const year = selectedDate.getFullYear();
     
-            const formattedDate = `${month} ${day}, ${year}`;
+            const formattedDate = `${day}.${month}.${year}`;
     
             if (step === 2) {
                 setDepartureDate(formattedDate);
@@ -88,8 +84,8 @@ const AddFlight = ({ flight }) => {
                 setArrivalDate(formattedDate);
             }
         }
-    };    
-
+    };
+    
     const handleTimeChange = (event, selectedTime) => {
         setShowTimePicker(false);
 
@@ -141,14 +137,15 @@ const AddFlight = ({ flight }) => {
             let flights = existingFlights ? JSON.parse(existingFlights) : [];
     
             if (flight) {
-                const updatedFlights = flights.map(c => 
-                    c === flight ? { ...c, ...newFlight } : c
-                );
-                flights = updatedFlights;
+                const flightIndex = flights.findIndex(f => f.name === flight.name);
+            
+                if (flightIndex !== -1) {
+                    flights[flightIndex] = { ...flights[flightIndex], ...newFlight };
+                }
             } else {
                 flights.push(newFlight);
             }
-    
+
             await AsyncStorage.setItem('flights', JSON.stringify(flights));
     
             console.log(flights);

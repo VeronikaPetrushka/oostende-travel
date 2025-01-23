@@ -96,10 +96,11 @@ const AddHotel = ({ hotel }) => {
             let hotels = existingHotels ? JSON.parse(existingHotels) : [];
     
             if (hotel) {
-                const updatedHotels = hotels.map(h => 
-                    h === hotel ? { ...h, ...newHotel } : h
-                );
-                hotels = updatedHotels;
+                const hotelIndex = hotels.findIndex(h => h.name === hotel.name);
+    
+                if (hotelIndex !== -1) {
+                    hotels[hotelIndex] = { ...hotels[hotelIndex], ...newHotel };
+                }
             } else {
                 hotels.push(newHotel);
             }
