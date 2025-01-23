@@ -62,6 +62,9 @@ const Icons = ({ type, active }) => {
     case 'less':
       imageSource = require('../assets/icons/less.png');
       break;
+    case 'dots':
+      imageSource = require('../assets/icons/dots.png');
+      break;
   }
 
   return (

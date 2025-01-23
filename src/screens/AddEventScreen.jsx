@@ -1,10 +1,12 @@
 import { View } from "react-native"
 import AddEvent from "../components/AddEvent"
 
-const AddEventScreen = () => {
+const AddEventScreen = ({ route }) => {
+    const { event } = route.params || {};
+
     return (
         <View style={styles.container}>
-            <AddEvent />
+            <AddEvent event={event} />
         </View>
     )
 }; 

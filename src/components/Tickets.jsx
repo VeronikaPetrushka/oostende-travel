@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView } from "react-native";
+import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView, Modal } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { Calendar } from 'react-native-calendars';
@@ -160,15 +160,91 @@ const Tickets = () => {
 
     console.log(filteredByDate)
 
+    // DOTS LOGIC
+
+    const [dotsModalVisible, setDotsModalVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedItemToDelete, setSelectedItemToDelete] = useState(null);
+    const [itemToDelete, setItemToDelete] = useState(null);
+
+    const handleDeleteDots = () => {
+        setDotsModalVisible(false);
+        setModalVisible(true);
+    };
+
+    const handleItemSelection = (item) => {
+        setItemToDelete(item);
+        setSelectedItemToDelete(item);
+        setDotsModalVisible(true)
+    }
+    
+    const deleteItem = async () => {
+        if (selectedItemToDelete) {
+            try {
+                if (button === 'Flights') {
+                    const updatedFlights = data.flights.filter((flight, index) => index !== selectedItemToDelete);
+                    setData(prevData => ({ ...prevData, flights: updatedFlights }));
+                    await AsyncStorage.setItem('flights', JSON.stringify(updatedFlights));
+                    console.log('Flight deleted successfully from flights storage!');
+                } else if (button === 'Hotels') {
+                    const updatedHotels = data.hotels.filter((hotel, index) => index !== selectedItemToDelete);
+                    const updatedFavHotels = favHotels.filter((favHotel, index) => index !== selectedItemToDelete);
+                    setData(prevData => ({ ...prevData, hotels: updatedHotels }));
+                    setFavHotels(updatedFavHotels);
+                    await AsyncStorage.setItem('hotels', JSON.stringify(updatedHotels));
+                    await AsyncStorage.setItem('favHotels', JSON.stringify(updatedFavHotels));
+                    console.log('Hotel deleted successfully from hotels and favHotels storage!');
+                } else if (button === 'Events') {
+                    const updatedEvents = data.events.filter((event, index) => index !== selectedItemToDelete);
+                    const updatedFavEvents = favEvents.filter((favEvent, index) => index !== selectedItemToDelete);
+                    setData(prevData => ({ ...prevData, events: updatedEvents }));
+                    setFavEvents(updatedFavEvents);
+                    await AsyncStorage.setItem('events', JSON.stringify(updatedEvents));
+                    await AsyncStorage.setItem('favEvents', JSON.stringify(updatedFavEvents));
+                    console.log('Event deleted successfully from events and favEvents storage!');
+                }
+
+                setModalVisible(false);
+
+                await fetchData();
+                await fetchFavorites();
+
+            } catch (error) {
+                console.error('Error deleting item or favorite:', error);
+            }
+        }
+    };
+    
+    const handleEdit = () => {
+        setDotsModalVisible(false);
+        if (button === 'Flights') {
+            navigation.navigate('AddFlightScreen', { flight: data.flights[selectedItemToDelete] });
+        } else if (button === 'Hotels') {
+            navigation.navigate('AddHotelScreen', { hotel: data.hotels[selectedItemToDelete] });
+        } else if (button === 'Events') {
+            navigation.navigate('AddEventScreen', { event: data.events[selectedItemToDelete] });
+        }
+        console.log(`Navigating to edit screen for ${button.toLowerCase()} with item:`, data[button.toLowerCase()][selectedItemToDelete]);
+    };
+    
     // RENDER ITEMS
 
     const renderHotels = (hotel, index) => (
         <View key={`hotel-${index}`} style={styles.hotelCard}>
+            <TouchableOpacity style={styles.dots} onPress={() => handleItemSelection(index)}>
+                <Icons type={'dots'} />
+            </TouchableOpacity>
             <Image source={{uri: hotel.cover}} style={styles.hotelCover} />
             <View style={styles.hotelUpperContainer}>
                 <View style={{alignItems: 'flex-start', width: '85%'}}>
                     <Text style={styles.hotelName} numberOfLines={1} ellipsizeMode='tail'>{hotel.name}</Text>
-                    <Text style={styles.hotelDesc} numberOfLines={1} ellipsizeMode='tail'>{hotel.description}</Text>
+                    {
+                        moreInfoHotel ? (
+                            <Text style={styles.hotelDesc}>{hotel.description}</Text>
+                        ) : (
+                            <Text style={styles.hotelDesc} numberOfLines={1} ellipsizeMode='tail'>{hotel.description}</Text>
+                        )
+                    }
                 </View>
                 <TouchableOpacity 
                     style={{width: 27, height: 24}}
@@ -263,11 +339,14 @@ const Tickets = () => {
                         </View>
 
                         {flight.comment && (
-                            <View style={{width: '100%'}}>
+                            <View style={{width: '100%', marginBottom: 12}}>
                                 <Text style={[styles.hotelSubTitle, {fontWeight: '700', marginBottom: 12}]}>Comment</Text>
                                 <Text style={styles.hotelSubTitle}>{flight.comment}</Text>
                             </View>
                         )}
+                        <TouchableOpacity style={styles.dotsFlight} onPress={() => handleItemSelection(index)}>
+                            <Icons type={'dots'} />
+                        </TouchableOpacity>
                     </View>
                 )
             }
@@ -277,12 +356,15 @@ const Tickets = () => {
 
     const renderEvents = (event, index) => (
         <View key={`event-${index}`} style={styles.hotelCard}>
+            <TouchableOpacity style={styles.dots} onPress={() => handleItemSelection(index)}>
+                <Icons type={'dots'} />
+            </TouchableOpacity>
             <Image source={{uri: event.cover}} style={styles.hotelCover} />
             <View style={styles.hotelUpperContainer}>
                 <View style={{alignItems: 'flex-start', width: '85%'}}>
                     <Text  style={styles.hotelName} numberOfLines={1} ellipsizeMode='tail'>{event.name}</Text>
                     {event.description && (
-                        <Text  style={styles.hotelDesc} numberOfLines={1} ellipsizeMode='tail'>{event.description}</Text>
+                        <Text  style={styles.hotelDesc}>{event.description}</Text>
                     )}
                 </View>
                 <TouchableOpacity 
@@ -387,6 +469,67 @@ const Tickets = () => {
             <TouchableOpacity style={styles.addBtn} onPress={handleAddItem}>
                 <Icons type={'plus'} />
             </TouchableOpacity>
+
+            <Modal
+                transparent={true}
+                animationType="fade"
+                visible={dotsModalVisible}
+                onRequestClose={() => setDotsModalVisible(false)}
+            >
+                <View style={[styles.modalContainer, {justifyContent: 'flex-end'}]}>
+                    <View style={styles.modalContentDots}>
+                        <View style={styles.modalBtnsContainer}>
+                            <TouchableOpacity
+                                style={styles.modalButton}
+                                onPress={handleEdit}
+                            >
+                                <Text 
+                                    style={[styles.modalButtonText, {borderTopWidth: 0, fontWeight: '400', color: '#000'}]}>
+                                        Edit
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.modalButton}
+                                onPress={handleDeleteDots}
+                            >
+                                <Text style={[styles.modalButtonText, {fontWeight: '400'}]}>Delete</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity
+                            style={styles.dotsCancelBtn}
+                            onPress={() => setDotsModalVisible(false)}
+                        >
+                            <Text style={styles.dotsCancelBtnText}>Cancel</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </Modal>
+
+            <Modal
+                    transparent={true}
+                    animationType="fade"
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>Delete the record</Text>
+                            <Text style={styles.modalText}>{`Are you sure you want to delete this record ?`}</Text>
+                            <TouchableOpacity
+                                style={styles.modalButton}
+                                onPress={deleteItem}
+                            >
+                                <Text style={styles.modalButtonText}>Delete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{width: '100%', paddingVertical: 11, alignItems: 'center', justifyContent: 'center'}}
+                                onPress={() => setModalVisible(false)}
+                            >
+                                <Text style={[styles.modalButtonText, {fontWeight: '400', color: '#000'}]}>Close</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
 
         </View>
     )
@@ -634,7 +777,101 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '700',
         color: '#000'
-    }
+    },
+
+    dots: {
+        width: 44,
+        height: 44,
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        zIndex: 10
+    },
+
+    dotsFlight: {
+        width: 44,
+        height: 44,
+        zIndex: 10
+    },
+
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    },
+
+    modalContent: {
+        width: '80%',
+        backgroundColor: '#fff',
+        borderRadius: 14,
+        paddingTop: 16,
+        alignItems: 'center',
+    },
+
+    modalContentDots: {
+        width: '95%',
+        alignItems: 'center',
+    },
+
+    modalBtnsContainer: {
+        width: '100%',
+        backgroundColor: '#fff',
+        borderRadius: 14,
+        alignItems: 'center',
+        marginBottom: 8
+    },
+
+    dotsCancelBtn: {
+        width: '100%',
+        padding: 15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 14,
+    },
+
+    dotsCancelBtnText: {
+        fontWeight: '600',
+        fontSize: 17,
+        lineHeight: 22,
+        color: '#000',
+    },
+
+    modalButton: {
+        width: '100%',
+        paddingVertical: 11,
+        borderTopWidth: 0.33,
+        borderBottomWidth: 0.33,
+        borderBottomColor: '#999',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    modalButtonText: {
+        fontWeight: '600',
+        fontSize: 17,
+        lineHeight: 22,
+        color: '#ff0e0a',
+    },
+
+    modalTitle: {
+        fontWeight: '600',
+        fontSize: 17,
+        lineHeight: 22,
+        color: '#000',
+        marginBottom: 5
+    },
+
+    modalText: {
+        fontWeight: '400',
+        fontSize: 16,
+        lineHeight: 19,
+        color: '#000',
+        marginBottom: 16,
+        textAlign: 'center'
+    },
+
 
 })
 

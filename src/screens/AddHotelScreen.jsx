@@ -1,10 +1,12 @@
 import { View } from "react-native"
 import AddHotel from "../components/AddHotel"
 
-const AddHotelScreen = () => {
+const AddHotelScreen = ({ route }) => {
+    const { hotel } = route.params || {};
+
     return (
         <View style={styles.container}>
-            <AddHotel />
+            <AddHotel hotel={hotel} />
         </View>
     )
 }; 
