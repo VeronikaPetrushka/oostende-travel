@@ -8,8 +8,8 @@ import Icons from './Icons';
 const { height } = Dimensions.get('window');
 
 const Profile = () => {
-    const [name, setName] = useState('');
-    const [image, setImage] = useState(null);
+    const [username, setUsername] = useState('');
+    const [avatar, setAvatar] = useState(null);
     const [saved, setSaved] = useState(false);
 
     const loadProfile = async () => {
@@ -17,8 +17,8 @@ const Profile = () => {
             const savedProfile = await AsyncStorage.getItem('profile');
             if (savedProfile) {
                 const profileData = JSON.parse(savedProfile);
-                setName(profileData.name || '');
-                setImage(profileData.image || null);
+                setUsername(profileData.username || '');
+                setAvatar(profileData.avatar || null);
                 setSaved(profileData.saved || null)
             }
         } catch (error) {
@@ -39,20 +39,20 @@ const Profile = () => {
     const handleImagePicker = () => {
         launchImageLibrary({ mediaType: 'photo' }, (response) => {
             if (!response.didCancel && !response.error && response.assets) {
-                setImage(response.assets[0].uri);
+                setAvatar(response.assets[0].uri);
             }
         });
     };
     
     const resetImage = () => {
-        setImage(null);
+        setAvatar(null);
     };
 
     const handleSave = async () => {
     
         const profileData = {
-            name,
-            image,
+            username,
+            avatar,
             saved: true,
         };
     
@@ -104,17 +104,17 @@ const Profile = () => {
                         saved ? (
                             <View style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', width: '100%'}}>
                                 <View style={[styles.imageContainer, {marginRight: 20, marginBottom: 0}]}>
-                                    <Image source={{ uri: image }} style={[styles.uploadedImage, {borderRadius: 300, resizeMode: 'cover'}]} />
+                                    <Image source={{ uri: avatar }} style={[styles.uploadedImage, {borderRadius: 300, resizeMode: 'cover'}]} />
                                 </View>
-                                <Text style={[styles.title, {fontSize: 24, fontWeight: '700'}]}>{name || 'User'}</Text>
+                                <Text style={[styles.title, {fontSize: 24, fontWeight: '700'}]}>{username || 'User'}</Text>
                             </View>
 
                         ) : (
                             <View style={{width: '100%', alignItems: 'center'}}>
                                 <View style={styles.imageContainer}>
-                                        {image ? (
+                                        {avatar ? (
                                             <>
-                                                <Image source={{ uri: image }} style={[styles.uploadedImage, {alignSelf: 'center', borderRadius: 300, resizeMode: 'cover'}]} />
+                                                <Image source={{ uri: avatar }} style={[styles.uploadedImage, {alignSelf: 'center', borderRadius: 300, resizeMode: 'cover'}]} />
                                                 <TouchableOpacity style={styles.crossImg} onPress={resetImage}>
                                                     <Icons type={'cross'} />
                                                 </TouchableOpacity>
@@ -128,21 +128,21 @@ const Profile = () => {
 
                                     <View style={styles.inputContainer}>
                                         <TextInput
-                                            style={[styles.input, name && {borderColor: '#ffcc02'}]}
+                                            style={[styles.input, username && {borderColor: '#ffcc02'}]}
                                             placeholder="Username"
                                             placeholderTextColor="#999"
-                                            value={name}
-                                            onChangeText={setName}
+                                            value={username}
+                                            onChangeText={setUsername}
                                         />
-                                        {name ? (
-                                            <TouchableOpacity style={styles.cross} onPress={() => resetInput(setName)}>
+                                        {username ? (
+                                            <TouchableOpacity style={styles.cross} onPress={() => resetInput(setUsername)}>
                                                 <Icons type={'cross'} />
                                             </TouchableOpacity>
                                         ) : null}
                                     </View>
                                     
 
-                                <TouchableOpacity style={[styles.saveBtn, (!image || !name) && {backgroundColor: '#ececec'}]} onPress={handleSave} disabled={!name || !image}>
+                                <TouchableOpacity style={[styles.saveBtn, (!avatar || !username) && {backgroundColor: '#ececec'}]} onPress={handleSave} disabled={!username || !avatar}>
                                     <Text style={styles.saveBtnText}>Save</Text>
                                 </TouchableOpacity>
 
