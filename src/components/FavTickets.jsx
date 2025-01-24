@@ -249,7 +249,7 @@ const FavTickets = () => {
                 calendar ? (
                     <View style={{width: '100%', alignItems: 'center'}}>
                         <Calendar
-                            style={{ width: width * 0.88, borderRadius: 16, backgroundColor: '#f6f6f6', overflow: 'hidden', padding: 5}}
+                            style={{ width: width * 0.88, borderRadius: 16, backgroundColor: '#fff', overflow: 'hidden', padding: 5}}
                                             onDayPress={handleDayPress}
                                             markedDates={
                                                 date

@@ -171,20 +171,20 @@ const Tickets = () => {
 
     // DOTS LOGIC
 
-    const [dotsModalVisible, setDotsModalVisible] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
+    const [toolsModalVisible, setToolsModalVisible] = useState(false);
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [selectedItemToDelete, setSelectedItemToDelete] = useState(null);
     const [itemToEdit, setIdemToEdit] = useState(null);
 
     const handleDeleteDots = async () => {
-        setDotsModalVisible(false);
-        setModalVisible(true);
+        setToolsModalVisible(false);
+        setDeleteModalVisible(true);
     };
 
     const handleItemSelection = (item) => {
         setIdemToEdit(item);
         setSelectedItemToDelete(item);
-        setDotsModalVisible(true)
+        setToolsModalVisible(true)
     }
     
     const deleteItem = async () => {
@@ -214,7 +214,7 @@ const Tickets = () => {
                     console.log('Event deleted successfully from events and favEvents storage!');
                 }
 
-                setModalVisible(false);
+                setDeleteModalVisible(false);
 
                 await fetchData();
                 await fetchFavorites();
@@ -226,7 +226,7 @@ const Tickets = () => {
     };
     
     const handleEdit = () => {
-        setDotsModalVisible(false);
+        setToolsModalVisible(false);
         if (button === 'Flights') {
             navigation.navigate('AddFlightScreen', { flight: data.flights[itemToEdit] });
         } else if (button === 'Hotels') {
@@ -482,8 +482,8 @@ const Tickets = () => {
             <Modal
                 transparent={true}
                 animationType="fade"
-                visible={dotsModalVisible}
-                onRequestClose={() => setDotsModalVisible(false)}
+                visible={toolsModalVisible}
+                onRequestClose={() => setToolsModalVisible(false)}
             >
                 <View style={[styles.modalContainer, {justifyContent: 'flex-end'}]}>
                     <View style={styles.modalContentDots}>
@@ -493,12 +493,12 @@ const Tickets = () => {
                                 onPress={handleEdit}
                             >
                                 <Text 
-                                    style={[styles.modalButtonText, {borderTopWidth: 0, fontWeight: '400', color: '#000'}]}>
+                                    style={[styles.modalButtonText, {fontWeight: '400', color: '#000'}]}>
                                         Edit
                                 </Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                style={styles.modalButton}
+                                style={[styles.modalButton, {borderTopWidth: 1, borderTopColor: '#ffcc02'}]}
                                 onPress={handleDeleteDots}
                             >
                                 <Text style={[styles.modalButtonText, {fontWeight: '400'}]}>Delete</Text>
@@ -506,7 +506,7 @@ const Tickets = () => {
                         </View>
                         <TouchableOpacity
                             style={styles.dotsCancelBtn}
-                            onPress={() => setDotsModalVisible(false)}
+                            onPress={() => setToolsModalVisible(false)}
                         >
                             <Text style={styles.dotsCancelBtnText}>Cancel</Text>
                         </TouchableOpacity>
@@ -517,24 +517,24 @@ const Tickets = () => {
             <Modal
                     transparent={true}
                     animationType="fade"
-                    visible={modalVisible}
-                    onRequestClose={() => setModalVisible(false)}
+                    visible={deleteModalVisible}
+                    onRequestClose={() => setDeleteModalVisible(false)}
                 >
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
-                            <Text style={styles.modalTitle}>Delete the record</Text>
-                            <Text style={styles.modalText}>{`Are you sure you want to delete this record ?`}</Text>
+                            <Text style={[styles.flightClass, {fontSize: 16, marginBottom: 16}]}>Last chance</Text>
+                            <Text style={styles.modalText}>Are you sure you want to delete this record ?</Text>
                             <TouchableOpacity
-                                style={styles.modalButton}
+                                style={[styles.modalButton, {borderWidth: 1, borderColor: '#ff0e0a', width: '90%', borderRadius: 16, marginBottom: 7}]}
                                 onPress={deleteItem}
                             >
                                 <Text style={styles.modalButtonText}>Delete</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                style={{width: '100%', paddingVertical: 11, alignItems: 'center', justifyContent: 'center'}}
-                                onPress={() => setModalVisible(false)}
+                                style={[styles.modalButton, { borderColor: '#ffcc02', backgroundColor: '#ffcc02', width: '90%', borderRadius: 16, marginBottom: 16}]}
+                                onPress={() => setDeleteModalVisible(false)}
                             >
-                                <Text style={[styles.modalButtonText, {fontWeight: '400', color: '#000'}]}>Close</Text>
+                                <Text style={[styles.modalButtonText, {fontWeight: '500', color: '#000'}]}>Close</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -828,7 +828,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 14,
         alignItems: 'center',
-        marginBottom: 8
+        marginBottom: 8,
     },
 
     dotsCancelBtn: {
@@ -850,9 +850,6 @@ const styles = StyleSheet.create({
     modalButton: {
         width: '100%',
         paddingVertical: 11,
-        borderTopWidth: 0.33,
-        borderBottomWidth: 0.33,
-        borderBottomColor: '#999',
         alignItems: 'center',
         justifyContent: 'center',
     },

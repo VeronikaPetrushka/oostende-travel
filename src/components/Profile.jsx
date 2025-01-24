@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { View, Text, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Linking } from "react-native"
+import { View, Text, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Linking, ScrollView } from "react-native"
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary } from 'react-native-image-picker';
@@ -73,6 +73,15 @@ const Profile = () => {
         const url = 'https://www.termsfeed.com/live/c46fccda-3dbd-4d32-b1f6-837200b19946';
         Linking.openURL(url).catch((err) => console.error('Failed to open URL:', err));
     };    
+
+    const handleRateApp = () => {
+        const url = Platform.select({
+            ios: 'https://apps.apple.com/us/app/oostende-travel/id6740922984',
+        });
+    
+        Linking.openURL(url).catch((err) => console.error('Failed to open URL:', err));
+    };
+    
     
     return (
         <View style={styles.container}>
@@ -88,67 +97,76 @@ const Profile = () => {
                 }
             </View>
 
+            <ScrollView style={{width: '100%', paddingHorizontal: 16}}>
+                <View style={{ paddingHorizontal: 16, marginTop: 20, marginBottom: 24, backgroundColor: '#fff', borderRadius: 20, padding: 20}}>
 
-            <View style={{width: '90%', paddingHorizontal: 16, marginTop: 20, marginBottom: 24, backgroundColor: '#fff', borderRadius: 20, padding: 20}}>
-
-                {
-                    saved ? (
-                        <View style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', width: '100%'}}>
-                            <View style={[styles.imageContainer, {marginRight: 20, marginBottom: 0}]}>
-                                <Image source={{ uri: image }} style={[styles.uploadedImage, {borderRadius: 300, resizeMode: 'cover'}]} />
+                    {
+                        saved ? (
+                            <View style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', width: '100%'}}>
+                                <View style={[styles.imageContainer, {marginRight: 20, marginBottom: 0}]}>
+                                    <Image source={{ uri: image }} style={[styles.uploadedImage, {borderRadius: 300, resizeMode: 'cover'}]} />
+                                </View>
+                                <Text style={[styles.title, {fontSize: 24, fontWeight: '700'}]}>{name || 'User'}</Text>
                             </View>
-                            <Text style={[styles.title, {fontSize: 24, fontWeight: '700'}]}>{name || 'User'}</Text>
-                        </View>
 
-                    ) : (
-                        <View style={{width: '100%', alignItems: 'center'}}>
-                            <View style={styles.imageContainer}>
-                                    {image ? (
-                                        <>
-                                            <Image source={{ uri: image }} style={[styles.uploadedImage, {alignSelf: 'center', borderRadius: 300, resizeMode: 'cover'}]} />
-                                            <TouchableOpacity style={styles.crossImg} onPress={resetImage}>
+                        ) : (
+                            <View style={{width: '100%', alignItems: 'center'}}>
+                                <View style={styles.imageContainer}>
+                                        {image ? (
+                                            <>
+                                                <Image source={{ uri: image }} style={[styles.uploadedImage, {alignSelf: 'center', borderRadius: 300, resizeMode: 'cover'}]} />
+                                                <TouchableOpacity style={styles.crossImg} onPress={resetImage}>
+                                                    <Icons type={'cross'} />
+                                                </TouchableOpacity>
+                                            </>
+                                        ) : (
+                                            <TouchableOpacity style={styles.add} onPress={handleImagePicker}>
+                                                <Icons type={'plus'} />
+                                            </TouchableOpacity>
+                                        )}
+                                    </View>
+
+                                    <View style={styles.inputContainer}>
+                                        <TextInput
+                                            style={[styles.input, name && {borderColor: '#ffcc02'}]}
+                                            placeholder="Username"
+                                            placeholderTextColor="#999"
+                                            value={name}
+                                            onChangeText={setName}
+                                        />
+                                        {name ? (
+                                            <TouchableOpacity style={styles.cross} onPress={() => resetInput(setName)}>
                                                 <Icons type={'cross'} />
                                             </TouchableOpacity>
-                                        </>
-                                    ) : (
-                                        <TouchableOpacity style={styles.add} onPress={handleImagePicker}>
-                                            <Icons type={'plus'} />
-                                        </TouchableOpacity>
-                                    )}
-                                </View>
+                                        ) : null}
+                                    </View>
+                                    
 
-                                <View style={styles.inputContainer}>
-                                    <TextInput
-                                        style={[styles.input, name && {borderColor: '#ffcc02'}]}
-                                        placeholder="Username"
-                                        placeholderTextColor="#999"
-                                        value={name}
-                                        onChangeText={setName}
-                                    />
-                                    {name ? (
-                                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setName)}>
-                                            <Icons type={'cross'} />
-                                        </TouchableOpacity>
-                                    ) : null}
-                                </View>
-                                
+                                <TouchableOpacity style={[styles.saveBtn, (!image || !name) && {backgroundColor: '#ececec'}]} onPress={handleSave} disabled={!name || !image}>
+                                    <Text style={styles.saveBtnText}>Save</Text>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity style={[styles.saveBtn, (!image || !name) && {backgroundColor: '#ececec'}]} onPress={handleSave} disabled={!name || !image}>
-                                <Text style={styles.saveBtnText}>Save</Text>
-                            </TouchableOpacity>
+                            </View>
+                        )
+                    }
 
-                        </View>
-                    )
-                }
+                </View>
 
-            </View>
+                <View style={styles.btn}>
+                    <Text style={styles.btnText}>Privacy Policy</Text>
+                    <TouchableOpacity style={styles.policyIcon} onPress={handlePrivacyPolicy}>
+                        <Icons type={'policy'} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.btn}>
+                    <Text style={styles.btnText}>Rate us</Text>
+                    <TouchableOpacity style={styles.policyIcon} onPress={handleRateApp}>
+                        <Icons type={'rate'} />
+                    </TouchableOpacity>
+                </View>
 
-            <View style={styles.btn}>
-                <Text style={styles.btnText}>Privacy Policy</Text>
-                <TouchableOpacity style={styles.policyIcon} onPress={handlePrivacyPolicy}>
-                    <Icons type={'policy'} />
-                </TouchableOpacity>
-            </View>
+                <View style={{height: 120}} />
+            </ScrollView>
 
         </View>
     )
@@ -270,14 +288,15 @@ const styles = StyleSheet.create({
     },
 
     btn: {
-        width: '90%',
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingVertical: 22.5,
         paddingHorizontal: 16,
         flexDirection: 'row',
         backgroundColor: '#fff',
-        borderRadius: 16
+        borderRadius: 16,
+        marginBottom: 12
     },
 
     btnText: {
