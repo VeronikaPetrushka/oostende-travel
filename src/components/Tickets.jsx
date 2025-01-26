@@ -769,35 +769,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    modalContentDots: {
-        width: '95%',
-        alignItems: 'center',
-    },
-
-    modalBtnsContainer: {
-        width: '100%',
-        backgroundColor: '#fff',
-        borderRadius: 14,
-        alignItems: 'center',
-        marginBottom: 8,
-    },
-
-    dotsCancelBtn: {
-        width: '100%',
-        padding: 15,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#ffcc02',
-        borderRadius: 14,
-    },
-
-    dotsCancelBtnText: {
-        fontWeight: '600',
-        fontSize: 17,
-        lineHeight: 22,
-        color: '#000',
-    },
-
     modalButton: {
         width: '100%',
         paddingVertical: 11,

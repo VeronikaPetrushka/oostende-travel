@@ -112,7 +112,8 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: '#000',
         fontWeight: '700',
-        lineHeight: 28.64
+        lineHeight: 28.64,
+        width: '80%'
     },
 
     subTitle: {
