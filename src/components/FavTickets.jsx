@@ -32,10 +32,6 @@ const FavTickets = () => {
         }, [])
     );    
 
-    console.log('favHotels:', favHotels);
-    console.log('favEvents:', favEvents);
-    console.log('filteredData:', filteredData);
-
     useEffect(() => {
         if (button === 'Hotels') {
             setFilteredData(favHotels);
@@ -43,8 +39,6 @@ const FavTickets = () => {
             setFilteredData(favEvents);
         }
     }, [button, favHotels, favEvents]);    
-
-    console.log('filteredData: ', filteredData)
 
     const handleCalendar = () => {
         if(calendar) {
@@ -67,7 +61,7 @@ const FavTickets = () => {
         setCalendar(false);
     };
     
-    const cancelFilter = () => {
+    const resetDates = () => {
         setDate(null);
         setCalendar(false);
     };   
@@ -96,8 +90,6 @@ const FavTickets = () => {
     const handleMoreInfoHotel = (index) => {
         setMoreInfoHotel((prevIndex) => (prevIndex === index ? null : index));
     };
-
-    // FAVORITES
 
     const getFavorites = async (key) => {
         try {
@@ -134,8 +126,6 @@ const FavTickets = () => {
             console.error('Error updating favorites:', error);
         }
     };    
-
-    // RENDER ITEMS
 
     const renderHotels = (hotel, index) => (
         <View key={`hotel-${index}`} style={styles.hotelCard}>
@@ -217,8 +207,6 @@ const FavTickets = () => {
         </View>
     );
 
-    // 
-
     return (
         <View style={styles.container}>
 
@@ -268,7 +256,7 @@ const FavTickets = () => {
                         {
                             date && (
                                 <View style={{ padding: 16, alignItems: 'center', justifyContent: 'center' }}>
-                                    <TouchableOpacity onPress={cancelFilter} style={styles.resetBtn}>
+                                    <TouchableOpacity onPress={resetDates} style={styles.resetBtn}>
                                         <Text style={styles.resetBtnText}>Reset dates</Text>
                                     </TouchableOpacity>
                                 </View>

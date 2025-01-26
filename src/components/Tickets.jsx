@@ -81,8 +81,6 @@ const Tickets = () => {
         setMoreInfoHotel((prevIndex) => (prevIndex === index ? null : index));
     };
 
-    // FAVORITES
-
     const getFavorites = async (key) => {
         try {
             const favorites = await AsyncStorage.getItem(key);
@@ -119,8 +117,6 @@ const Tickets = () => {
         }
     };    
 
-    // DATE FILTERS
-
     const handleCalendar = () => {
         if(calendar) {
             setCalendar(false);
@@ -143,7 +139,7 @@ const Tickets = () => {
     };
     
     
-    const cancelFilter = () => {
+    const resetDates = () => {
         setDate(null);
         setCalendar(false);
     };    
@@ -165,27 +161,15 @@ const Tickets = () => {
     })
     : filteredData;
 
-    console.log('date: ', date)
-
-    console.log('filteredByDate: ', filteredByDate)
-
-    // DOTS LOGIC
-
-    const [toolsModalVisible, setToolsModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [selectedItemToDelete, setSelectedItemToDelete] = useState(null);
     const [itemToEdit, setIdemToEdit] = useState(null);
 
-    const handleDeleteDots = async () => {
-        setToolsModalVisible(false);
+    const handleDeleteDots = async (item) => {
         setDeleteModalVisible(true);
-    };
-
-    const handleItemSelection = (item) => {
         setIdemToEdit(item);
         setSelectedItemToDelete(item);
-        setToolsModalVisible(true)
-    }
+    };
     
     const deleteItem = async () => {
         console.log('selectedItemToDelete: ', selectedItemToDelete)
@@ -226,7 +210,7 @@ const Tickets = () => {
     };
     
     const handleEdit = () => {
-        setToolsModalVisible(false);
+        setDeleteModalVisible(false);
         if (button === 'Flights') {
             navigation.navigate('AddFlightScreen', { flight: data.flights[itemToEdit] });
         } else if (button === 'Hotels') {
@@ -237,11 +221,9 @@ const Tickets = () => {
         console.log(`Navigating to edit screen for ${button.toLowerCase()} with item:`, data[button.toLowerCase()][itemToEdit]);
     };
     
-    // RENDER ITEMS
-
     const renderHotels = (hotel, index) => (
         <View key={`hotel-${index}`} style={styles.hotelCard}>
-            <TouchableOpacity style={styles.dots} onPress={() => handleItemSelection(index)}>
+            <TouchableOpacity style={styles.dots} onPress={() => handleDeleteDots(index)}>
                 <Icons type={'dots'} />
             </TouchableOpacity>
             <Image source={{uri: hotel.cover}} style={styles.hotelCover} />
@@ -354,7 +336,7 @@ const Tickets = () => {
                                 <Text style={styles.hotelSubTitle}>{flight.comment}</Text>
                             </View>
                         )}
-                        <TouchableOpacity style={styles.dotsFlight} onPress={() => handleItemSelection(index)}>
+                        <TouchableOpacity style={styles.dotsFlight} onPress={() => handleDeleteDots(index)}>
                             <Icons type={'dots'} />
                         </TouchableOpacity>
                     </View>
@@ -366,7 +348,7 @@ const Tickets = () => {
 
     const renderEvents = (event, index) => (
         <View key={`event-${index}`} style={styles.hotelCard}>
-            <TouchableOpacity style={styles.dots} onPress={() => handleItemSelection(index)}>
+            <TouchableOpacity style={styles.dots} onPress={() => handleDeleteDots(index)}>
                 <Icons type={'dots'} />
             </TouchableOpacity>
             <Image source={{uri: event.cover}} style={styles.hotelCover} />
@@ -391,8 +373,6 @@ const Tickets = () => {
             </View>
         </View>
     );
-
-    // 
 
     return (
         <View style={styles.container}>
@@ -446,7 +426,7 @@ const Tickets = () => {
                         {
                             date && (
                                 <View style={{ padding: 16, alignItems: 'center', justifyContent: 'center' }}>
-                                    <TouchableOpacity onPress={cancelFilter} style={styles.resetBtn}>
+                                    <TouchableOpacity onPress={resetDates} style={styles.resetBtn}>
                                         <Text style={styles.resetBtnText}>Reset dates</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -480,41 +460,6 @@ const Tickets = () => {
             </TouchableOpacity>
 
             <Modal
-                transparent={true}
-                animationType="fade"
-                visible={toolsModalVisible}
-                onRequestClose={() => setToolsModalVisible(false)}
-            >
-                <View style={[styles.modalContainer, {justifyContent: 'flex-end'}]}>
-                    <View style={styles.modalContentDots}>
-                        <View style={styles.modalBtnsContainer}>
-                            <TouchableOpacity
-                                style={styles.modalButton}
-                                onPress={handleEdit}
-                            >
-                                <Text 
-                                    style={[styles.modalButtonText, {fontWeight: '400', color: '#000'}]}>
-                                        Edit
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.modalButton, {borderTopWidth: 1, borderTopColor: '#ffcc02'}]}
-                                onPress={handleDeleteDots}
-                            >
-                                <Text style={[styles.modalButtonText, {fontWeight: '400'}]}>Delete</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <TouchableOpacity
-                            style={styles.dotsCancelBtn}
-                            onPress={() => setToolsModalVisible(false)}
-                        >
-                            <Text style={styles.dotsCancelBtnText}>Cancel</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </Modal>
-
-            <Modal
                     transparent={true}
                     animationType="fade"
                     visible={deleteModalVisible}
@@ -524,6 +469,12 @@ const Tickets = () => {
                         <View style={styles.modalContent}>
                             <Text style={[styles.flightClass, {fontSize: 16, marginBottom: 16}]}>Last chance</Text>
                             <Text style={styles.modalText}>Are you sure you want to delete this record ?</Text>
+                            <TouchableOpacity
+                                style={[styles.modalButton, {borderWidth: 1, borderColor: '#6e6d6d', width: '90%', borderRadius: 16, marginBottom: 7}]}
+                                onPress={handleEdit}
+                            >
+                                <Text style={[styles.modalButtonText, {color: '#6e6d6d'}]}>Edit</Text>
+                            </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.modalButton, {borderWidth: 1, borderColor: '#ff0e0a', width: '90%', borderRadius: 16, marginBottom: 7}]}
                                 onPress={deleteItem}
