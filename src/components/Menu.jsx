@@ -57,7 +57,7 @@ const Menu = () => {
                     <View style={{width: 24, height: 24}}>
                         <Icons type={'4'} active={activeButton === 'ProfileScreen'}/>
                     </View>
-                    {activeButton === 'ProfileScreen' && <Text style={styles.activeBtnText}>Profile</Text>}
+                    {activeButton === 'ProfileScreen' && <Text style={styles.activeBtnText}>Tools</Text>}
                 </TouchableOpacity>
 
         </View>

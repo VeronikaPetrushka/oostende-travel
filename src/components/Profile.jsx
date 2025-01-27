@@ -1,73 +1,9 @@
-import React, { useState, useCallback } from 'react'
-import { View, Text, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, Linking, ScrollView } from "react-native"
-import { useFocusEffect } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { launchImageLibrary } from 'react-native-image-picker';
+import { View, Text, TouchableOpacity, Dimensions, StyleSheet, Linking } from "react-native"
 import Icons from './Icons';
 
 const { height } = Dimensions.get('window');
 
 const Profile = () => {
-    const [username, setUsername] = useState('');
-    const [avatar, setAvatar] = useState(null);
-    const [saved, setSaved] = useState(false);
-
-    const loadProfile = async () => {
-        try {
-            const savedProfile = await AsyncStorage.getItem('profile');
-            if (savedProfile) {
-                const profileData = JSON.parse(savedProfile);
-                setUsername(profileData.username || '');
-                setAvatar(profileData.avatar || null);
-                setSaved(profileData.saved || null)
-            }
-        } catch (error) {
-            console.error('Error loading profile:', error);
-        }
-    };
-
-    useFocusEffect(
-        useCallback(() => {
-            loadProfile();
-        }, [])
-    );
-
-    const resetInput = (setter) => {
-        setter('');
-    };
-
-    const handleImagePicker = () => {
-        launchImageLibrary({ mediaType: 'photo' }, (response) => {
-            if (!response.didCancel && !response.error && response.assets) {
-                setAvatar(response.assets[0].uri);
-            }
-        });
-    };
-    
-    const resetImage = () => {
-        setAvatar(null);
-    };
-
-    const handleSave = async () => {
-    
-        const profileData = {
-            username,
-            avatar,
-            saved: true,
-        };
-    
-        try {
-            await AsyncStorage.setItem('profile', JSON.stringify(profileData));
-            alert('Profile saved successfully!');
-            console.log('Saved Profile:', profileData);
-
-            await loadProfile();
-
-        } catch (error) {
-            console.error('Error saving profile:', error);
-            alert('Failed to save your profile. Please try again.');
-        }
-    };    
 
     const handlePrivacyPolicy = () => {
         const url = 'https://www.termsfeed.com/live/c46fccda-3dbd-4d32-b1f6-837200b19946';
@@ -82,76 +18,14 @@ const Profile = () => {
         Linking.openURL(url).catch((err) => console.error('Failed to open URL:', err));
     };
     
-    
     return (
         <View style={styles.container}>
 
-            <View style={[styles.upperContainer, !saved && {justifyContent: 'center'}]}>
-                <Text style={styles.title}>Profile</Text>
-                {
-                    saved && (
-                        <TouchableOpacity onPress={() => setSaved(false)}>
-                            <Text style={{fontSize: 18, color: '#ffcc02'}}>Edit</Text>
-                        </TouchableOpacity>
-                    )
-                }
+            <View style={styles.upperContainer}>
+                <Text style={styles.title}>Tools</Text>
             </View>
 
-            <ScrollView style={{width: '100%', paddingHorizontal: 16}}>
-                <View style={{ paddingHorizontal: 16, marginTop: 20, marginBottom: 24, backgroundColor: '#fff', borderRadius: 20, padding: 20}}>
-
-                    {
-                        saved ? (
-                            <View style={{alignItems: 'center', justifyContent: 'flex-start', flexDirection: 'row', width: '100%'}}>
-                                <View style={[styles.imageContainer, {marginRight: 20, marginBottom: 0}]}>
-                                    <Image source={{ uri: avatar }} style={[styles.uploadedImage, {borderRadius: 300, resizeMode: 'cover'}]} />
-                                </View>
-                                <Text style={[styles.title, {fontSize: 24, fontWeight: '700'}]}>{username || 'User'}</Text>
-                            </View>
-
-                        ) : (
-                            <View style={{width: '100%', alignItems: 'center'}}>
-                                <View style={styles.imageContainer}>
-                                        {avatar ? (
-                                            <>
-                                                <Image source={{ uri: avatar }} style={[styles.uploadedImage, {alignSelf: 'center', borderRadius: 300, resizeMode: 'cover'}]} />
-                                                <TouchableOpacity style={styles.crossImg} onPress={resetImage}>
-                                                    <Icons type={'cross'} />
-                                                </TouchableOpacity>
-                                            </>
-                                        ) : (
-                                            <TouchableOpacity style={styles.add} onPress={handleImagePicker}>
-                                                <Icons type={'plus'} />
-                                            </TouchableOpacity>
-                                        )}
-                                    </View>
-
-                                    <View style={styles.inputContainer}>
-                                        <TextInput
-                                            style={[styles.input, username && {borderColor: '#ffcc02'}]}
-                                            placeholder="Username"
-                                            placeholderTextColor="#999"
-                                            value={username}
-                                            onChangeText={setUsername}
-                                        />
-                                        {username ? (
-                                            <TouchableOpacity style={styles.cross} onPress={() => resetInput(setUsername)}>
-                                                <Icons type={'cross'} />
-                                            </TouchableOpacity>
-                                        ) : null}
-                                    </View>
-                                    
-
-                                <TouchableOpacity style={[styles.saveBtn, (!avatar || !username) && {backgroundColor: '#ececec'}]} onPress={handleSave} disabled={!username || !avatar}>
-                                    <Text style={styles.saveBtnText}>Save</Text>
-                                </TouchableOpacity>
-
-                            </View>
-                        )
-                    }
-
-                </View>
-
+            <View style={{width: '100%', paddingHorizontal: 16}}>
                 <View style={styles.btn}>
                     <Text style={styles.btnText}>Privacy Policy</Text>
                     <TouchableOpacity style={styles.policyIcon} onPress={handlePrivacyPolicy}>
@@ -165,8 +39,7 @@ const Profile = () => {
                     </TouchableOpacity>
                 </View>
 
-                <View style={{height: 120}} />
-            </ScrollView>
+            </View>
 
         </View>
     )
@@ -184,11 +57,12 @@ const styles = StyleSheet.create({
     upperContainer: {
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         flexDirection: 'row',
         padding: 16,
         paddingTop: height * 0.07,
         backgroundColor: '#fff',
+        marginBottom: 50
     },
 
     add: {

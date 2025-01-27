@@ -63,7 +63,7 @@ const Home = () => {
             <View style={{width: '100%', alignItems: 'center', paddingHorizontal: 16}}>
                 <View style={styles.upperPanel}>
                     <Text style={styles.upperText}>Oostende Travel</Text>
-                    <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FavoritesScreen')}>
+                    <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FavoriteScreen')}>
                         <Icons type={'fav'} />
                     </TouchableOpacity>
                 </View>

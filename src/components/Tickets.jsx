@@ -65,11 +65,11 @@ const Tickets = () => {
 
     const handleAddItem = () => {
         if(button === 'Flights') {
-            navigation.navigate('AddFlightScreen')
+            navigation.navigate('AddFlightsScreen')
         } else if (button === 'Hotels') {
-            navigation.navigate('AddHotelScreen')
+            navigation.navigate('AddHotelsScreen')
         } else if (button === 'Events') {
-            navigation.navigate('AddEventScreen')
+            navigation.navigate('AddEventsScreen')
         }
     };
 
@@ -212,11 +212,11 @@ const Tickets = () => {
     const handleEdit = () => {
         setDeleteModalVisible(false);
         if (button === 'Flights') {
-            navigation.navigate('AddFlightScreen', { flight: data.flights[itemToEdit] });
+            navigation.navigate('AddFlightsScreen', { flight: data.flights[itemToEdit] });
         } else if (button === 'Hotels') {
-            navigation.navigate('AddHotelScreen', { hotel: data.hotels[itemToEdit] });
+            navigation.navigate('AddHotelsScreen', { hotel: data.hotels[itemToEdit] });
         } else if (button === 'Events') {
-            navigation.navigate('AddEventScreen', { event: data.events[itemToEdit] });
+            navigation.navigate('AddEventsScreen', { event: data.events[itemToEdit] });
         }
         console.log(`Navigating to edit screen for ${button.toLowerCase()} with item:`, data[button.toLowerCase()][itemToEdit]);
     };
