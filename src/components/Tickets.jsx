@@ -67,9 +67,9 @@ const Tickets = () => {
         if(button === 'Flights') {
             navigation.navigate('AddFlightsScreen')
         } else if (button === 'Hotels') {
-            navigation.navigate('AddHotelsScreen')
+            navigation.navigate('AddHotelScreen')
         } else if (button === 'Events') {
-            navigation.navigate('AddEventsScreen')
+            navigation.navigate('AddEventScreen')
         }
     };
 
@@ -214,9 +214,9 @@ const Tickets = () => {
         if (button === 'Flights') {
             navigation.navigate('AddFlightsScreen', { flight: data.flights[itemToEdit] });
         } else if (button === 'Hotels') {
-            navigation.navigate('AddHotelsScreen', { hotel: data.hotels[itemToEdit] });
+            navigation.navigate('AddHotelScreen', { hotel: data.hotels[itemToEdit] });
         } else if (button === 'Events') {
-            navigation.navigate('AddEventsScreen', { event: data.events[itemToEdit] });
+            navigation.navigate('AddEventScreen', { event: data.events[itemToEdit] });
         }
         console.log(`Navigating to edit screen for ${button.toLowerCase()} with item:`, data[button.toLowerCase()][itemToEdit]);
     };
