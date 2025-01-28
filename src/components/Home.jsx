@@ -123,7 +123,7 @@ const Home = () => {
                         )}
                     </View>
                 ) : (
-                    <ScrollView style={{width: '100%', padding: 16, backgroundColor: '#ececec'}}>
+                    <ScrollView style={{width: '100%', padding: 16, backgroundColor: '#000'}}>
                         {
                             places.map((place, index) => (
                                 <View key={index} style={styles.placeCard}>
@@ -134,7 +134,7 @@ const Home = () => {
                                         <Text style={styles.moreBtnText}>Read more</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.placeFav} onPress={() => saveFavorites(place)}>
-                                        <Icons type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} />
+                                        <Icons type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} light={favorites.some((fav) => fav.name === place.name)}  />
                                     </TouchableOpacity>
                                 </View>
                             ))
@@ -153,7 +153,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: height * 0.07,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#000'
     },
 
     upperPanel: {
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     upperText: {
         fontSize: 27,
         fontWeight: '800',
-        color: '#000',
+        color: '#fff',
         lineHeight: 33.41
     },
 
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
         width: '100%',
         padding: 16,
         borderRadius: 20,
-        backgroundColor: '#fff',
+        backgroundColor: '#1c1c1c',
         marginBottom: 16,
         alignItems: 'flex-start',
     },
@@ -225,7 +226,7 @@ const styles = StyleSheet.create({
     placeName: {
         fontSize: 15,
         fontWeight: '700',
-        color: '#000',
+        color: '#fff',
         lineHeight: 17.9,
         marginBottom: 6,
     },
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
     placeDesc: {
         fontSize: 13,
         fontWeight: '400',
-        color: '#000',
+        color: '#fff',
         lineHeight: 15.5,
         marginBottom: 6,
         width: 286,

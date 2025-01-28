@@ -122,9 +122,9 @@ const AddHotel = ({ hotel }) => {
 
             <View style={styles.upperContainer}>
                 <TouchableOpacity style={styles.back} onPress={() => navigation.goBack('')}>
-                    <Icons type={'back'} />
+                    <Icons type={'back'} light />
                 </TouchableOpacity>
-                <Text style={[styles.label, {marginBottom: 0, fontSize: 17, lineHeight: 22}]}>Back</Text>
+                <Text style={[styles.label, {marginBottom: 0, fontSize: 17, lineHeight: 22, color: '#ffcc02'}]}>Back</Text>
             </View>
 
             <Text style={styles.title}>Add a hotel</Text>
@@ -225,6 +225,7 @@ const AddHotel = ({ hotel }) => {
                     <DateTimePicker
                         value={new Date()}
                         mode="date"
+                        themeVariant="dark"
                         display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                         onChange={handleDateChange}
                     />
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#000',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         padding: 16,
@@ -311,7 +312,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: '600',
         fontSize: 32,
-        color: '#000',
+        color: '#fff',
         marginBottom: 32
     },
 
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start', 
         marginBottom: 8, 
         lineHeight: 20.8, 
-        color: '#000'
+        color: '#fff'
     },
 
     inputContainer: {
@@ -335,11 +336,11 @@ const styles = StyleSheet.create({
         width: '100%',
         fontSize: 16,
         fontWeight: '400',
-        color: '#000',
-        backgroundColor: '#fff',
+        color: '#fff',
+        backgroundColor: '#3d3d3d',
         borderWidth: 1,
         borderRadius: 12,
-        borderColor: '#000',
+        borderColor: '#1c1c1c',
         paddingHorizontal: 20,
         paddingVertical: 16.5,
     },
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
     coverContainer: {
         width: '100%',
         height: 191,
-        backgroundColor: '#f6f6f6',
+        backgroundColor: '#3d3d3d',
         borderWidth: 1,
         borderColor: "#000",
         borderRadius: 12,
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: 100,
         height: 150,
-        backgroundColor: '#f6f6f6',
+        backgroundColor: '#3d3d3d',
         borderWidth: 1,
         borderColor: "#000",
         borderRadius: 12,

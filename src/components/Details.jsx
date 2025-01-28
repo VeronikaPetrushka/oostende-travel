@@ -49,7 +49,7 @@ const Details = ({ place }) => {
         <View style={styles.container}>
             <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack('')}>
                 <View style={{width: 17, height: 22, marginRight: 5}}>
-                    <Icons type={'back'} />
+                    <Icons type={'back'} light />
                 </View>
                 <Text style={styles.backBtnText}>Back</Text>
             </TouchableOpacity>
@@ -60,7 +60,7 @@ const Details = ({ place }) => {
                 <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexDirection: 'row'}}>
                     <Text style={styles.name}>{place.name}</Text>
                     <TouchableOpacity style={{width: 31, height: 28}} onPress={() => saveFavorites(place)}>
-                        <Icons type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} />
+                        <Icons type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} light={favorites.some((fav) => fav.name === place.name)} />
                     </TouchableOpacity>
                 </View>
 
@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: height * 0.13,
-        padding: 16
+        padding: 16,
+        backgroundColor: '#000',
     },
 
     backBtn: {
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
 
     backBtnText: {
         fontSize: 17,
-        color: '#000',
+        color: '#ffcc02',
         fontWeight: '400',
         lineHeight: 22
     },
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
 
     name: {
         fontSize: 24,
-        color: '#000',
+        color: '#ffcc02',
         fontWeight: '700',
         lineHeight: 28.64,
         width: '80%'
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
 
     subTitle: {
         fontSize: 16,
-        color: '#000',
+        color: '#fff',
         fontWeight: '700',
         lineHeight: 19.09,
         marginBottom: 10
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
 
     description: {
         fontSize: 16,
-        color: '#000',
+        color: '#fff',
         fontWeight: '400',
         lineHeight: 19.09,
         marginBottom: 16

@@ -165,7 +165,7 @@ const Game = ({ item }) => {
             <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12}}>
                 <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => navigation.goBack('')}>
                     <View style={{width: 17, height: 22, marginRight: 7}}>
-                        <Icons type={'back'} />
+                        <Icons type={'back'} light />
                     </View>
                     <Text style={styles.upperText}>Back</Text>
                 </TouchableOpacity>
@@ -184,12 +184,13 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: height * 0.07,
         padding: 16,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#000'
     },
 
     upperText: {
         fontSize: 17,
-        color: '#000',
+        color: '#ffcc02',
         fontWeight: '400',
         lineHeight: 22
     },
@@ -204,7 +205,7 @@ const styles = StyleSheet.create({
 
     question: {
         fontSize: 24,
-        color: '#000',
+        color: '#fff',
         marginBottom: height * 0.02,
         fontWeight: '700',
         lineHeight: 28.64
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
 
     option: {
         width: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: '#3d3d3d',
         borderRadius: 12,
         alignItems: 'center',
         justifyContent: 'center',
@@ -249,7 +250,7 @@ const styles = StyleSheet.create({
 
     finishTitle: {
         fontSize: 32,
-        color: '#000',
+        color: '#ffcc02',
         fontWeight: '700',
         lineHeight: 38.2,
         marginBottom: 32,
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
 
     finishText: {
         fontSize: 20,
-        color: '#000',
+        color: '#fff',
         fontWeight: '400',
         lineHeight: 23.87,
         marginBottom: 32,
@@ -282,14 +283,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 2,
-        borderColor: '#000',
+        borderColor: '#3d3d3d',
         borderRadius: 12,
         marginBottom: 24
     },
 
     finishBtnText: {
         fontSize: 16,
-        color: '#000',
+        color: '#3d3d3d',
         fontWeight: '500',
         lineHeight: 19.09,
     }

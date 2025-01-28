@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#ececec',
+        backgroundColor: '#000',
         alignItems: 'center',
         justifyContent: 'flex-start'
     },
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 16,
         paddingTop: height * 0.07,
-        backgroundColor: '#fff',
+        backgroundColor: '#1c1c1c',
         marginBottom: 50
     },
 
@@ -74,91 +74,7 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         fontSize: 28,
         lineHeight: 33.41,
-        color: '#000'
-    },
-
-    label: {
-        fontSize: 20, 
-        fontWeight: '700',
-        alignSelf: 'flex-start', 
-        marginBottom: 16, 
-        lineHeight: 23.87, 
-        color: '#000'
-    },
-
-    inputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-        marginBottom: 24,
-    },
-
-    input: {
-        width: '100%',
-        fontSize: 16,
-        fontWeight: '400',
-        color: '#000',
-        backgroundColor: '#fff',
-        borderWidth: 1,
-        borderRadius: 16,
-        borderColor: '#000',
-        paddingHorizontal: 20,
-        paddingVertical: 16.5,
-    },
-
-    cross: {
-        width: 24,
-        height: 24,
-        position: 'absolute',
-        top: 15,
-        right: 20,
-        zIndex: 10
-    },
-
-    imageContainer: {
-        width: 100,
-        height: 100,
-        backgroundColor: '#ececec',
-        borderWidth: 0.5,
-        borderRadius: 300,
-        borderColor: "#000",
-        marginBottom: 24,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    crossImg: {
-        width: 27,
-        height: 27,
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        zIndex: 10,
-        padding: 3,
-        backgroundColor: '#ececec',
-        borderRadius: 30
-    },
-
-    uploadedImage: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-    },
-
-    saveBtn: {
-        width: '100%',
-        backgroundColor: '#ffcc02',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 16.5,
-        borderRadius: 16
-    },
-
-    saveBtnText: {
-        fontWeight: '700',
-        fontSize: 16,
-        lineHeight: 19,
-        color: '#000',
+        color: '#fff'
     },
 
     btn: {
@@ -168,7 +84,7 @@ const styles = StyleSheet.create({
         paddingVertical: 22.5,
         paddingHorizontal: 16,
         flexDirection: 'row',
-        backgroundColor: '#fff',
+        backgroundColor: '#3d3d3d',
         borderRadius: 16,
         marginBottom: 12
     },

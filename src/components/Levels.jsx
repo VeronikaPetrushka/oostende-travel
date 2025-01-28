@@ -80,7 +80,8 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#000'
     },
 
     upperContainer: {
@@ -90,13 +91,13 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         justifyContent: 'center',
         marginBottom: 40,
-        backgroundColor: '#fff'
+        backgroundColor: '#1c1c1c'
     },
 
     upperText: {
         fontSize: 28,
         fontWeight: '800',
-        color: '#000',
+        color: '#fff',
         lineHeight: 33.4
     },
 
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
         padding: 16,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#3d3d3d',
         borderRadius: 12,
         marginBottom: 24,
         flexDirection: 'row'

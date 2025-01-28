@@ -202,7 +202,7 @@ const Tickets = () => {
                     style={{width: 27, height: 24}}
                     onPress={() => toggleFavorite('favHotels', hotel, setFavHotels)}
                     >
-                    <Icons type={isFavorite(favHotels, hotel) ? 'fav-saved' : 'fav-not'} />
+                    <Icons type={isFavorite(favHotels, hotel) ? 'fav-saved' : 'fav-not'} light={isFavorite(favHotels, hotel)} />
                 </TouchableOpacity>
             </View>
 
@@ -267,7 +267,7 @@ const Tickets = () => {
                         <Text style={styles.flightDate} numberOfLines={1} ellipsizeMode='tail'>{flight.arrival}</Text>
                     </View>
                 </View>
-                <Text style={styles.flightCost}>{flight.cost} $</Text>
+                <Text style={{color: '#fff'}}>{flight.cost} $</Text>
             </View>
 
             <View style={[styles.moreInfoContainer, {padding: 0, marginBottom: 12}]}>
@@ -323,7 +323,7 @@ const Tickets = () => {
                     style={{width: 27, height: 24}}
                     onPress={() => toggleFavorite('favEvents', event, setFavEvents)}
                     >
-                    <Icons type={isFavorite(favEvents, event) ? 'fav-saved' : 'fav-not'} />
+                    <Icons type={isFavorite(favEvents, event) ? 'fav-saved' : 'fav-not'} light={isFavorite(favEvents, event)} />
                 </TouchableOpacity>
             </View>
 
@@ -360,7 +360,7 @@ const Tickets = () => {
                 </View>
             </View>
 
-                    <ScrollView style={{ width: '100%', padding: 16, backgroundColor: '#ececec' }}>
+                    <ScrollView style={{ width: '100%', padding: 16, backgroundColor: '#000' }}>
                         {filteredByDate.map((item, index) =>
                             button === 'Flights'
                                 ? renderFlights(item, index)
@@ -418,7 +418,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: height * 0.07,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#000'
     },
 
     upperPanel: {
@@ -432,25 +433,8 @@ const styles = StyleSheet.create({
     upperText: {
         fontSize: 27,
         fontWeight: '800',
-        color: '#000',
+        color: '#fff',
         lineHeight: 33.41
-    },
-
-    calendarIcon: {
-        backgroundColor: '#fff', 
-        width: 47,
-        height: 44,
-        paddingVertical: 9,
-        paddingHorizontal: 12,
-        borderRadius: 12,
-        marginRight: 16,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 0,
-        },
-        shadowOpacity: 0.2,
-        shadowRadius: 2,
     },
 
     favIcon: {
@@ -507,14 +491,14 @@ const styles = StyleSheet.create({
 
     nothingText: {
         fontSize: 16,
-        color: '#000',
+        color: '#ffcc02',
         textAlign: 'center',
         fontWeight: '400'
     },
 
     hotelCard: {
         width: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: '#1c1c1c',
         borderRadius: 22,
         alignItems: 'center',
         marginBottom: 24
@@ -542,7 +526,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '700',
         lineHeight: 17.9,
-        color: '#000',
+        color: '#fff',
         marginBottom: 6,
         width: '100%'
     },
@@ -551,7 +535,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: '400',
         lineHeight: 15.5,
-        color: '#000',
+        color: '#fff',
         width: '100%'
     },
 
@@ -567,14 +551,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '700',
         lineHeight: 14.32,
-        color: '#000',
+        color: '#ffcc02',
     },
 
     hotelSubTitle: {
         fontSize: 12,
         fontWeight: '400',
         lineHeight: 14.32,
-        color: '#000',
+        color: '#fff',
     },
 
     hotelImage: {
@@ -588,7 +572,7 @@ const styles = StyleSheet.create({
     flightCard: {
         width: '100%',
         padding: 16,
-        backgroundColor: '#fff',
+        backgroundColor: '#1c1c1c',
         borderRadius: 22,
         alignItems: 'center',
         marginBottom: 24
@@ -598,7 +582,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '400',
         lineHeight: 16.7,
-        color: '#000',
+        color: '#fff',
     },
 
     flightClass: {
@@ -642,19 +626,6 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: '#999',
         lineHeight: 14.32
-    },
-
-    resetBtn: {
-        paddingVertical: 7,
-        paddingHorizontal: 40,
-        borderRadius: 100,
-        backgroundColor: '#ffcc02',
-    },
-
-    resetBtnText: {
-        fontSize: 14,
-        fontWeight: '700',
-        color: '#000'
     },
 
     dots: {
