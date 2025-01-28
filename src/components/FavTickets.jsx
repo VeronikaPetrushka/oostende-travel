@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { Calendar } from 'react-native-calendars';
 import Icons from "./Icons";
 
 const { height, width } = Dimensions.get('window');
@@ -39,53 +38,6 @@ const FavTickets = () => {
             setFilteredData(favEvents);
         }
     }, [button, favHotels, favEvents]);    
-
-    const handleCalendar = () => {
-        if(calendar) {
-            setCalendar(false);
-        } else {
-            setCalendar(true);
-        }
-    };
-
-    const handleDayPress = (day) => {
-        const selectedDate = new Date(day.dateString);
-    
-        const dayOfMonth = selectedDate.getDate().toString().padStart(2, '0');
-        const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
-        const year = selectedDate.getFullYear();
-    
-        const formattedDate = `${dayOfMonth}.${month}.${year}`;
-    
-        setDate(formattedDate);
-        setCalendar(false);
-    };
-    
-    const resetDates = () => {
-        setDate(null);
-        setCalendar(false);
-    };   
-    
-    const filteredByDate = date
-    ? filteredData.filter(item => {
-        if (button === 'Flights') {
-            const flightDate = item.arrivalDate;
-            console.log(flightDate)
-            return flightDate === date;
-        } else if (button === 'Hotels') {
-            const hotelDate = item.arrivalDate;
-            return hotelDate === date;
-        } else if (button === 'Events') {
-            const eventDate = item.date;
-            return eventDate === date;
-        }
-        return false;
-    })
-    : filteredData;
-
-    console.log('date: ', date)
-
-    console.log('filteredByDate: ', filteredByDate)
 
     const handleMoreInfoHotel = (index) => {
         setMoreInfoHotel((prevIndex) => (prevIndex === index ? null : index));
@@ -214,9 +166,6 @@ const FavTickets = () => {
                 <View style={styles.upperPanel}>
                     <Text style={styles.upperText}>Your Favorites</Text>
                     <View style={{alignItems: 'center', flexDirection: 'row'}}>
-                        <TouchableOpacity style={styles.calendarIcon} onPress={handleCalendar}>
-                            <Icons type={'calendar'} />
-                        </TouchableOpacity>
                         <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack('')}>
                             <Icons type={'back'} />
                         </TouchableOpacity>
@@ -233,45 +182,14 @@ const FavTickets = () => {
                 </View>
             </View>
 
-            {
-                calendar ? (
-                    <View style={{width: '100%', alignItems: 'center'}}>
-                        <Calendar
-                            style={{ width: width * 0.88, borderRadius: 16, backgroundColor: '#fff', overflow: 'hidden', padding: 5}}
-                                            onDayPress={handleDayPress}
-                                            markedDates={
-                                                date
-                                                    ? { date: { selected: true, selectedColor: '#ffcc02' } }
-                                                    : {}
-                                            }
-                            theme={{
-                                selectedDayBackgroundColor: '#ffcc02',
-                                todayTextColor: '#ffcc02',
-                                arrowColor: '#ffcc02',
-                                textDayFontWeight: '500',
-                                textMonthFontWeight: 'bold',
-                                textDayHeaderFontWeight: '500',
-                            }}
-                        />
-                        {
-                            date && (
-                                <View style={{ padding: 16, alignItems: 'center', justifyContent: 'center' }}>
-                                    <TouchableOpacity onPress={resetDates} style={styles.resetBtn}>
-                                        <Text style={styles.resetBtnText}>Reset dates</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )
-                        }
-                    </View>
-                ) : (
                     <ScrollView style={{ width: '100%', padding: 16, backgroundColor: '#ececec' }}>
-                        {filteredByDate.map((item, index) =>
+                        {filteredData.map((item, index) =>
                             button === 'Hotels'
                                 ? renderHotels(item, index)
                                 : renderEvents(item, index)
                         )}
                         {
-                            filteredByDate.length === 0 && (
+                            filteredData.length === 0 && (
                                 <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
                                     <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24}} />
                                     <Text style={styles.nothingText}>{`There aren’t any ${button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
@@ -280,8 +198,6 @@ const FavTickets = () => {
                         }
                         <View style={{ height: 120 }} />
                     </ScrollView>
-                )
-            }
 
         </View>
     )

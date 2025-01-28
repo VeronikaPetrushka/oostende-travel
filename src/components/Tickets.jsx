@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView, Modal } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { Calendar } from 'react-native-calendars';
 import Icons from "./Icons";
 
 const { height, width } = Dimensions.get('window');
@@ -117,33 +116,6 @@ const Tickets = () => {
         }
     };    
 
-    const handleCalendar = () => {
-        if(calendar) {
-            setCalendar(false);
-        } else {
-            setCalendar(true);
-        }
-    };
-
-    const handleDayPress = (day) => {
-        const selectedDate = new Date(day.dateString);
-    
-        const dayOfMonth = selectedDate.getDate().toString().padStart(2, '0');
-        const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
-        const year = selectedDate.getFullYear();
-    
-        const formattedDate = `${dayOfMonth}.${month}.${year}`;
-    
-        setDate(formattedDate);
-        setCalendar(false);
-    };
-    
-    
-    const resetDates = () => {
-        setDate(null);
-        setCalendar(false);
-    };    
-
     const filteredByDate = date
     ? filteredData.filter(item => {
         if (button === 'Flights') {
@@ -207,18 +179,6 @@ const Tickets = () => {
                 console.error('Error deleting item or favorite:', error);
             }
         }
-    };
-    
-    const handleEdit = () => {
-        setDeleteModalVisible(false);
-        if (button === 'Flights') {
-            navigation.navigate('AddFlightScreen', { flight: data.flights[itemToEdit] });
-        } else if (button === 'Hotels') {
-            navigation.navigate('AddHotelScreen', { hotel: data.hotels[itemToEdit] });
-        } else if (button === 'Events') {
-            navigation.navigate('AddEventScreen', { event: data.events[itemToEdit] });
-        }
-        console.log(`Navigating to edit screen for ${button.toLowerCase()} with item:`, data[button.toLowerCase()][itemToEdit]);
     };
     
     const renderHotels = (hotel, index) => (
@@ -381,9 +341,6 @@ const Tickets = () => {
                 <View style={styles.upperPanel}>
                     <Text style={styles.upperText}>Oostende Travel</Text>
                     <View style={{alignItems: 'center', flexDirection: 'row'}}>
-                        <TouchableOpacity style={styles.calendarIcon} onPress={handleCalendar}>
-                            <Icons type={'calendar'} />
-                        </TouchableOpacity>
                         <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FavTicketsScreen')}>
                             <Icons type={'fav'} />
                         </TouchableOpacity>
@@ -403,37 +360,6 @@ const Tickets = () => {
                 </View>
             </View>
 
-            {
-                calendar ? (
-                    <View style={{width: '100%', alignItems: 'center'}}>
-                        <Calendar
-                            style={{ width: width * 0.88, borderRadius: 16, backgroundColor: '#fff', overflow: 'hidden', padding: 5}}
-                                            onDayPress={handleDayPress}
-                                            markedDates={
-                                                date
-                                                    ? { date: { selected: true, selectedColor: '#ffcc02' } }
-                                                    : {}
-                                            }
-                            theme={{
-                                selectedDayBackgroundColor: '#ffcc02',
-                                todayTextColor: '#ffcc02',
-                                arrowColor: '#ffcc02',
-                                textDayFontWeight: '500',
-                                textMonthFontWeight: 'bold',
-                                textDayHeaderFontWeight: '500',
-                            }}
-                        />
-                        {
-                            date && (
-                                <View style={{ padding: 16, alignItems: 'center', justifyContent: 'center' }}>
-                                    <TouchableOpacity onPress={resetDates} style={styles.resetBtn}>
-                                        <Text style={styles.resetBtnText}>Reset dates</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            )
-                        }
-                    </View>
-                ) : (
                     <ScrollView style={{ width: '100%', padding: 16, backgroundColor: '#ececec' }}>
                         {filteredByDate.map((item, index) =>
                             button === 'Flights'
@@ -452,8 +378,6 @@ const Tickets = () => {
                         }
                         <View style={{ height: 120 }} />
                     </ScrollView>
-                )
-            }
 
             <TouchableOpacity style={styles.addBtn} onPress={handleAddItem}>
                 <Icons type={'plus'} />
@@ -469,12 +393,6 @@ const Tickets = () => {
                         <View style={styles.modalContent}>
                             <Text style={[styles.flightClass, {fontSize: 16, marginBottom: 16}]}>Last chance</Text>
                             <Text style={styles.modalText}>Are you sure you want to delete this record ?</Text>
-                            <TouchableOpacity
-                                style={[styles.modalButton, {borderWidth: 1, borderColor: '#6e6d6d', width: '90%', borderRadius: 16, marginBottom: 7}]}
-                                onPress={handleEdit}
-                            >
-                                <Text style={[styles.modalButtonText, {color: '#6e6d6d'}]}>Edit</Text>
-                            </TouchableOpacity>
                             <TouchableOpacity
                                 style={[styles.modalButton, {borderWidth: 1, borderColor: '#ff0e0a', width: '90%', borderRadius: 16, marginBottom: 7}]}
                                 onPress={deleteItem}
