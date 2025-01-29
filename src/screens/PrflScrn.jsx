@@ -1,13 +1,13 @@
 import { View } from "react-native"
-import Levels from "../components/Levels"
-import Menu from "../components/Menu";
+import Prfl from "../components/Prfl"
+import M from "../components/M";
 
-const LevelsScreen = () => {
+const PrflScreen = () => {
     return (
         <View style={styles.container}>
-            <Levels />
-            <View style={styles.menu}>
-                <Menu />
+            <Prfl />
+            <View style={styles.M}>
+                <M />
             </View>
         </View>
     )
@@ -18,7 +18,7 @@ const styles = {
         width: "100%",
         height: "100%",
     },
-    menu: {
+    M: {
         position: 'absolute',
         bottom: 40,
         left: 0,
@@ -26,4 +26,4 @@ const styles = {
     }
 }
 
-export default LevelsScreen;
+export default PrflScreen;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 
-const Icons = ({ type, active, light }) => {
+const Icns = ({ type, active, light }) => {
 
   let imageSource;
   let iconStyle = [styles.icon];
@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Icons;
+export default Icns;

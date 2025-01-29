@@ -3,11 +3,11 @@ import { View, TouchableOpacity, Text, StyleSheet, Dimensions, ScrollView } from
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import game from "../constants/game";
-import Icons from './Icons';
+import Icns from './Icns';
 
 const { height } = Dimensions.get('window');
 
-const Levels = () => {
+const Lvls = () => {
     const navigation = useNavigation();
     const [levels, setLevels] = useState([]);
 
@@ -39,7 +39,7 @@ const Levels = () => {
 
     const handleLevelPress = async (item) => {
         try {
-            navigation.navigate("GameScreen", { item });
+            navigation.navigate("GScrn", { item });
         } catch (error) {
             console.error("Error navigating to level:", error);
         }
@@ -65,7 +65,7 @@ const Levels = () => {
                         disabled={!level.open}
                     >
                         <View style={[level.success ? {width: 32, height: 32, marginRight: 10} : {width: 24, height: 24, marginRight: 10}]}>
-                            <Icons type={level.success ? 'success' : !level.open ? 'locked' : ''} />
+                            <Icns type={level.success ? 'success' : !level.open ? 'locked' : ''} />
                         </View>
                         <Text style={[styles.btnText, level.open && !level.success && {marginLeft: -30}]}>LVL {level.level}</Text>
                     </TouchableOpacity>
@@ -121,4 +121,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Levels;
+export default Lvls;

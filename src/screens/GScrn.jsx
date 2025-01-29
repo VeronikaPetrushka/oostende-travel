@@ -1,12 +1,12 @@
 import { View } from "react-native"
-import AddHotel from "../components/AddHotel"
+import G from "../components/G"
 
-const AddHotelScreen = ({ route }) => {
-    const { hotel } = route.params || {};
+const GScrn = ({ route }) => {
+    const { item } = route.params;
 
     return (
         <View style={styles.container}>
-            <AddHotel hotel={hotel} />
+            <G item={item} />
         </View>
     )
 }; 
@@ -18,4 +18,4 @@ const styles = {
     }
 }
 
-export default AddHotelScreen;
+export default GScrn;

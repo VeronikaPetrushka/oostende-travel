@@ -4,11 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary } from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
-import Icons from './Icons';
+import Icns from './Icns';
 
 const { height } = Dimensions.get('window');
 
-const AddHotel = ({ hotel }) => {
+const AH = ({ hotel }) => {
     const navigation = useNavigation();
     const [name, setName] = useState(hotel ? hotel.name : '');
     const [description, setDescription] = useState(hotel ? hotel.description : '');
@@ -17,9 +17,9 @@ const AddHotel = ({ hotel }) => {
     const [arrivalDate, setArrivalDate] = useState(hotel ? hotel.arrivalDate : '');
     const [cover, setCover] = useState(hotel ? hotel.cover : null);
     const [images, setImages] = useState(hotel ? hotel.images : []);
-    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [sDP, sSDP] = useState(false);
 
-    const resetInput = (setter) => {
+    const resIn = (setter) => {
         setter('');
     };
         
@@ -31,7 +31,7 @@ const AddHotel = ({ hotel }) => {
         });
     };
 
-    const handleImagePicker = () => {
+    const hImP = () => {
         launchImageLibrary({ mediaType: 'photo', selectionLimit: 0 }, (response) => {
             if (!response.didCancel && !response.error && response.assets) {
                 const newImages = response.assets.map(asset => asset.uri);
@@ -40,17 +40,17 @@ const AddHotel = ({ hotel }) => {
         });
     };
     
-    const handleImageDelete = (index) => {
+    const hImD = (index) => {
         const updatedImages = images.filter((_, i) => i !== index);
         setImages(updatedImages);
     };    
     
-    const resetImage = () => {
+    const resIm = () => {
         setCover(null);
     };
 
-    const handleDateChange = (event, selectedDate) => {
-        setShowDatePicker(false);
+    const hDC = (event, selectedDate) => {
+        sSDP(false);
     
         if (selectedDate) {
             const now = new Date();
@@ -74,7 +74,7 @@ const AddHotel = ({ hotel }) => {
         }
     };
     
-    const handleSave = async () => {
+    const hS = async () => {
         if (!name || !description || !address || !departureDate || !arrivalDate || !cover) {
             alert('Please fill out all fields to proceed.');
             return;
@@ -122,7 +122,7 @@ const AddHotel = ({ hotel }) => {
 
             <View style={styles.upperContainer}>
                 <TouchableOpacity style={styles.back} onPress={() => navigation.goBack('')}>
-                    <Icons type={'back'} light />
+                    <Icns type={'back'} light />
                 </TouchableOpacity>
                 <Text style={[styles.label, {marginBottom: 0, fontSize: 17, lineHeight: 22, color: '#ffcc02'}]}>Back</Text>
             </View>
@@ -140,8 +140,8 @@ const AddHotel = ({ hotel }) => {
                         onChangeText={setName}
                     />
                     {name ? (
-                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setName)}>
-                            <Icons type={'cross'} />
+                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setName)}>
+                            <Icns type={'cross'} />
                         </TouchableOpacity>
                     ) : null}
                 </View>
@@ -157,8 +157,8 @@ const AddHotel = ({ hotel }) => {
                         multiline
                     />
                     {description ? (
-                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDescription)}>
-                            <Icons type={'cross'} />
+                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setDescription)}>
+                            <Icns type={'cross'} />
                         </TouchableOpacity>
                     ) : null}
                 </View>
@@ -173,8 +173,8 @@ const AddHotel = ({ hotel }) => {
                         onChangeText={setAddress}
                     />
                     {address ? (
-                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setAddress)}>
-                            <Icons type={'cross'} />
+                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setAddress)}>
+                            <Icns type={'cross'} />
                         </TouchableOpacity>
                     ) : null}
                 </View>
@@ -182,7 +182,7 @@ const AddHotel = ({ hotel }) => {
                 <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24}}>
                     <View style={{width: '47%', alignItems: 'flex-start'}}>
                         <Text style={styles.label}>Start date</Text>
-                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => setShowDatePicker(true)}>
+                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => sSDP(true)}>
                             <TextInput
                                     style={[styles.input, {paddingLeft: 40}]}
                                     placeholder="DD.MM.YYYY"
@@ -191,18 +191,18 @@ const AddHotel = ({ hotel }) => {
                                     editable={false}
                                 />
                                 <View style={styles.dateIcon}>
-                                    <Icons type={'calendar'} />
+                                    <Icns type={'calendar'} />
                                 </View>
                                 {arrivalDate ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setArrivalDate)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrivalDate)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                         </TouchableOpacity>
                     </View>
                     <View style={{width: '47%', alignItems: 'flex-start'}}>
                         <Text style={styles.label}>Finish date</Text>
-                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => setShowDatePicker(true)}>
+                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => sSDP(true)}>
                             <TextInput
                                 style={[styles.input, {paddingLeft: 40}]}
                                 placeholder="DD.MM.YYYY"
@@ -211,23 +211,23 @@ const AddHotel = ({ hotel }) => {
                                 editable={false}
                             />
                             <View style={styles.dateIcon}>
-                                <Icons type={'calendar'} />
+                                <Icns type={'calendar'} />
                             </View>
                             {departureDate ? (
-                                <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDepartureDate)}>
-                                    <Icons type={'cross'} />
+                                <TouchableOpacity style={styles.cross} onPress={() => resIn(setDepartureDate)}>
+                                    <Icns type={'cross'} />
                                 </TouchableOpacity>
                             ) : null}
                         </TouchableOpacity>
                     </View>
                 </View>
-                {showDatePicker && (
+                {sDP && (
                     <DateTimePicker
                         value={new Date()}
                         mode="date"
                         themeVariant="dark"
                         display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                        onChange={handleDateChange}
+                        onChange={hDC}
                     />
                 )}
 
@@ -236,13 +236,13 @@ const AddHotel = ({ hotel }) => {
                     {cover ? (
                         <>
                             <Image source={{ uri: cover }} style={styles.uploadedImage} />
-                            <TouchableOpacity style={styles.crossImg} onPress={resetImage}>
-                                <Icons type={'cross'} />
+                            <TouchableOpacity style={styles.crossImg} onPress={resIm}>
+                                <Icns type={'cross'} />
                             </TouchableOpacity>
                         </>
                     ) : (
                         <TouchableOpacity style={styles.add} onPress={handleCoverPicker}>
-                            <Icons type={'plus'} />
+                            <Icns type={'plus'} />
                         </TouchableOpacity>
                     )}
                 </View>
@@ -253,21 +253,21 @@ const AddHotel = ({ hotel }) => {
                             {images.map((image, index) => (
                                 <View key={index} style={styles.imageContainer}>
                                     <Image source={{ uri: image }} style={styles.uploadedImage} />
-                                    <TouchableOpacity style={styles.crossImg} onPress={() => handleImageDelete(index)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.crossImg} onPress={() => hImD(index)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 </View>
                             ))}
                             <View style={styles.imageContainer}>
-                                <TouchableOpacity style={styles.add} onPress={handleImagePicker}>
-                                    <Icons type={'plus'} />
+                                <TouchableOpacity style={styles.add} onPress={hImP}>
+                                    <Icns type={'plus'} />
                                 </TouchableOpacity>
                             </View>
                         </ScrollView>
                     ) : (
                         <View style={styles.imageContainer}>
-                            <TouchableOpacity style={styles.add} onPress={handleImagePicker}>
-                                <Icons type={'plus'} />
+                            <TouchableOpacity style={styles.add} onPress={hImP}>
+                                <Icns type={'plus'} />
                             </TouchableOpacity>
                         </View>
                     )}
@@ -276,7 +276,7 @@ const AddHotel = ({ hotel }) => {
 
             </ScrollView>
 
-            <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
+            <TouchableOpacity style={styles.saveBtn} onPress={hS}>
                 <Text style={styles.saveBtnText}>Save</Text>
             </TouchableOpacity>
 
@@ -438,4 +438,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default AddHotel;
+export default AH;

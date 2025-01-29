@@ -1,10 +1,12 @@
 import { View } from "react-native"
-import FavTickets from "../components/FavTickets"
+import AE from "../components/AE"
 
-const FavTicketsScreen = () => {
+const AEScrn = ({ route }) => {
+    const { event } = route.params || {};
+
     return (
         <View style={styles.container}>
-            <FavTickets />
+            <AE event={event} />
         </View>
     )
 }; 
@@ -16,4 +18,4 @@ const styles = {
     }
 }
 
-export default FavTicketsScreen;
+export default AEScrn;

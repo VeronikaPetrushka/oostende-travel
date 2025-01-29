@@ -3,17 +3,18 @@ import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation } from '@react-navigation/native';
 import MapView, { Marker } from 'react-native-maps';
-import Icons from "./Icons";
+import places from '../constants/places';
+import Icns from "./Icns";
 
 const { height } = Dimensions.get('window');
 
-const Favorites = () => {
+const H = () => {
     const navigation = useNavigation();
     const [button, setButton] = useState('map');
     const [favorites, setFavorites] = useState([]);
     const [selectedPlace, setSelectedPlace] = useState(null);
 
-    const loadFavorites = async () => {
+    const lF = async () => {
         try {
             const storedFavorites = await AsyncStorage.getItem('favorites');
             if (storedFavorites) {
@@ -25,10 +26,10 @@ const Favorites = () => {
     };
 
     useEffect(() => {
-        loadFavorites();
+        lF();
     }, []);
 
-    const saveFavorites = async (placeToFav) => {
+    const sF = async (placeToFav) => {
         try {
             const isAlreadyFav = favorites.some((place) => place.name === placeToFav.name);
 
@@ -61,9 +62,9 @@ const Favorites = () => {
 
             <View style={{width: '100%', alignItems: 'center', paddingHorizontal: 16}}>
                 <View style={styles.upperPanel}>
-                    <Text style={styles.upperText}>Your Favorites</Text>
-                    <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack('')}>
-                        <Icons type={'back'} />
+                    <Text style={styles.upperText}>Oostende Travel</Text>
+                    <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FvrtsScrn')}>
+                        <Icns type={'fav'} />
                     </TouchableOpacity>
                 </View>
 
@@ -89,7 +90,7 @@ const Favorites = () => {
                                 longitudeDelta: 0.05,
                             }}
                         >
-                            {favorites.map((place, index) => (
+                            {places.map((place, index) => (
                                 <Marker
                                     key={index}
                                     coordinate={{
@@ -102,21 +103,21 @@ const Favorites = () => {
                                         width: selectedPlace?.name === place.name ? 50 : 26,
                                         height: selectedPlace?.name === place.name ? 61 : 32,
                                     }}>
-                                        <Icons type={'pin'} />
+                                        <Icns type={'pin'} />
                                     </View>
                                 </Marker>
                             ))}
                         </MapView>
                         {selectedPlace && (
-                            <View style={[styles.placeCard, {position: 'absolute', bottom: 16, width: '91%', left: 16}]}>
+                            <View style={[styles.placeCard, {position: 'absolute', bottom: 100, width: '91%', left: 16}]}>
                                 <Image source={selectedPlace.image} style={styles.placeImage} />
                                 <Text style={styles.placeName}>{selectedPlace.name}</Text>
                                 <Text style={styles.placeDesc} numberOfLines={2}>{selectedPlace.description[0]}</Text>
-                                <TouchableOpacity style={styles.moreBtn} onPress={() => navigation.navigate('DetailsScreen', { place: selectedPlace })}>
+                                <TouchableOpacity style={styles.moreBtn} onPress={() => navigation.navigate('DtlsScrn', { place: selectedPlace })}>
                                     <Text style={styles.moreBtnText}>Read more</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.placeFav} onPress={() => saveFavorites(selectedPlace)}>
-                                    <Icons type={favorites.some((fav) => fav.name === selectedPlace.name) ? 'fav-saved' : 'fav-not'} />
+                                <TouchableOpacity style={styles.placeFav} onPress={() => sF(selectedPlace)}>
+                                    <Icns type={favorites.some((fav) => fav.name === selectedPlace.name) ? 'fav-saved' : 'fav-not'} />
                                 </TouchableOpacity>
                             </View>
                         )}
@@ -124,27 +125,19 @@ const Favorites = () => {
                 ) : (
                     <ScrollView style={{width: '100%', padding: 16, backgroundColor: '#000'}}>
                         {
-                            favorites.map((place, index) => (
+                            places.map((place, index) => (
                                 <View key={index} style={styles.placeCard}>
                                     <Image source={place.image} style={styles.placeImage} />
                                     <Text style={styles.placeName}>{place.name}</Text>
                                     <Text style={styles.placeDesc} numberOfLines={1} ellipsizeMode='tail'>{place.description}</Text>
-                                    <TouchableOpacity style={styles.moreBtn} onPress={() => navigation.navigate('DetailsScreen', {place: place})}>
+                                    <TouchableOpacity style={styles.moreBtn} onPress={() => navigation.navigate('DtlsScrn', {place: place})}>
                                         <Text style={styles.moreBtnText}>Read more</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={styles.placeFav} onPress={() => saveFavorites(place)}>
-                                        <Icons type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} light={favorites.some((fav) => fav.name === place.name)}  />
+                                    <TouchableOpacity style={styles.placeFav} onPress={() => sF(place)}>
+                                        <Icns type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} light={favorites.some((fav) => fav.name === place.name)}  />
                                     </TouchableOpacity>
                                 </View>
                             ))
-                        }
-                        {
-                            favorites.length === 0 && (
-                                <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
-                                    <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24}} />
-                                    <Text style={styles.nothingText}>{`There aren’t any places you add yet, you can do it now`}</Text>
-                                </View>
-                            )
                         }
                         <View style={{height: 120}} />
                     </ScrollView>
@@ -179,10 +172,10 @@ const styles = StyleSheet.create({
         lineHeight: 33.41
     },
 
-    backIcon: {
-        width: 44,
-        height: 47,
-        padding: 12,
+    favIcon: {
+        width: 47,
+        height: 44,
+        padding: 11,
         borderRadius: 12,
         backgroundColor: '#ffcc02'
     },
@@ -265,15 +258,9 @@ const styles = StyleSheet.create({
     mapContainer: {
         width: '100%',
         height: '82%'
-    },
+    }
 
-    nothingText: {
-        fontSize: 16,
-        color: '#ffcc02',
-        textAlign: 'center',
-        fontWeight: '400'
-    },
 
 })
 
-export default Favorites;
+export default H;

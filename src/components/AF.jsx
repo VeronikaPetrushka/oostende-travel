@@ -3,11 +3,11 @@ import { View, Text, TouchableOpacity, TextInput, Dimensions, StyleSheet, Scroll
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
-import Icons from './Icons';
+import Icns from './Icns';
 
 const { height } = Dimensions.get('window');
 
-const AddFlight = ({ flight }) => {
+const AF = ({ flight }) => {
     const navigation = useNavigation();
     const [departure, setDeparture] = useState(flight ? flight.departure : '');
     const [arrival, setArrival] = useState(flight ? flight.arrival : '');
@@ -21,11 +21,11 @@ const AddFlight = ({ flight }) => {
     const [cost, setCost] = useState(flight ? flight.cost : '');
     const [comment, setComment] = useState(flight ? flight.comment : '');
     const [step, setStep] = useState(1);
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [showTimePicker, setShowTimePicker] = useState(false);
+    const [sDP, sSDP] = useState(false);
+    const [sTP, sSTP] = useState(false);
     const [showDurationPicker, setShowDurationPicker] = useState(false);
 
-    const resetInput = (setter) => {
+    const resIn = (setter) => {
         setter('');
     };
 
@@ -57,12 +57,12 @@ const AddFlight = ({ flight }) => {
         } else if (step === 3) {
             setStep(4);
         } else if (step === 4) {
-            handleSave();
+            hS();
         }
     };    
 
-    const handleDateChange = (event, selectedDate) => {
-        setShowDatePicker(false);
+    const hDC = (event, selectedDate) => {
+        sSDP(false);
     
         if (selectedDate) {
             const now = new Date();
@@ -86,8 +86,8 @@ const AddFlight = ({ flight }) => {
         }
     };
     
-    const handleTimeChange = (event, selectedTime) => {
-        setShowTimePicker(false);
+    const hTC = (event, selectedTime) => {
+        sSTP(false);
 
         if (selectedTime) {
             const hours = selectedTime.getHours();
@@ -115,7 +115,7 @@ const AddFlight = ({ flight }) => {
         }
     };    
 
-    const handleSave = async () => {
+    const hS = async () => {
 
         
         const newFlight = {
@@ -166,7 +166,7 @@ const AddFlight = ({ flight }) => {
 
             <View style={styles.upperContainer}>
                 <TouchableOpacity style={styles.back} onPress={() => navigation.goBack('')}>
-                    <Icons type={'back'} light />
+                    <Icns type={'back'} light />
                 </TouchableOpacity>
                 <Text style={[styles.label, {marginBottom: 0, fontSize: 17, lineHeight: 22, color: '#ffcc02'}]}>Back</Text>
             </View>
@@ -187,8 +187,8 @@ const AddFlight = ({ flight }) => {
                                     onChangeText={setDeparture}
                                 />
                                 {departure ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDeparture)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setDeparture)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                             </View>
@@ -203,8 +203,8 @@ const AddFlight = ({ flight }) => {
                                     onChangeText={setArrival}
                                 />
                                 {arrival ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setArrival)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrival)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                             </View>
@@ -217,14 +217,14 @@ const AddFlight = ({ flight }) => {
                                         disabled={passengers === 1}
                                         onPress={() => setPassengers((prev) => Math.max(prev - 1, 1))}
                                     >
-                                        <Icons type={'minus'} />
+                                        <Icns type={'minus'} />
                                     </TouchableOpacity>
                                         <Text style={styles.countText}>{passengers}</Text>
                                     <TouchableOpacity 
                                         style={{width: 18, height: 18}} 
                                         onPress={() => setPassengers((prev) => prev + 1)}
                                     >
-                                        <Icons type={'add'} />
+                                        <Icns type={'add'} />
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -258,7 +258,7 @@ const AddFlight = ({ flight }) => {
                     step === 2 && (
                         <>
                             <Text style={styles.label}>Date of departure</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
+                            <TouchableOpacity style={styles.inputContainer} onPress={() => sSDP(true)}>
                                 <TextInput
                                     style={[styles.input, {paddingLeft: 50}]}
                                     placeholder="DD.MM.YYYY"
@@ -267,26 +267,26 @@ const AddFlight = ({ flight }) => {
                                     editable={false}
                                 />
                                 <View style={styles.dateIcon}>
-                                    <Icons type={'calendar'} />
+                                    <Icns type={'calendar'} />
                                 </View>
                                 {departureDate ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDepartureDate)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setDepartureDate)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                             </TouchableOpacity>
-                            {showDatePicker && (
+                            {sDP && (
                                 <DateTimePicker
                                     value={new Date()}
                                     mode="date"
                                     themeVariant="dark"
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleDateChange}
+                                    onChange={hDC}
                                 />
                             )}
 
                             <Text style={styles.label}>Time of departure</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => setShowTimePicker(true)}>
+                            <TouchableOpacity style={styles.inputContainer} onPress={() => sSTP(true)}>
                                 <TextInput
                                     style={[styles.input, {paddingLeft: 50}]}
                                     placeholder="HH:MM"
@@ -295,22 +295,22 @@ const AddFlight = ({ flight }) => {
                                     editable={false}
                                 />
                                 <View style={styles.dateIcon}>
-                                    <Icons type={'time'} />
+                                    <Icns type={'time'} />
                                 </View>
                                 {departureTime ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDepartureTime)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setDepartureTime)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                             </TouchableOpacity>
-                            {showTimePicker && (
+                            {sTP && (
                                 <DateTimePicker
                                     value={new Date()}
                                     mode="time"
                                     themeVariant="dark"
                                     is24Hour={false}
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleTimeChange}
+                                    onChange={hTC}
                                 />
                             )}
                         </>
@@ -320,7 +320,7 @@ const AddFlight = ({ flight }) => {
                     step === 3 && (
                         <>
                             <Text style={styles.label}>Date of arrival</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
+                            <TouchableOpacity style={styles.inputContainer} onPress={() => sSDP(true)}>
                                 <TextInput
                                     style={[styles.input, {paddingLeft: 50}]}
                                     placeholder="DD.MM.YYYY"
@@ -329,26 +329,26 @@ const AddFlight = ({ flight }) => {
                                     editable={false}
                                 />
                                 <View style={styles.dateIcon}>
-                                    <Icons type={'calendar'} />
+                                    <Icns type={'calendar'} />
                                 </View>
                                 {arrivalDate ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setArrivalDate)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrivalDate)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                             </TouchableOpacity>
-                            {showDatePicker && (
+                            {sDP && (
                                 <DateTimePicker
                                     value={new Date()}
                                     mode="date"
                                     themeVariant="dark"
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleDateChange}
+                                    onChange={hDC}
                                 />
                             )}
 
                             <Text style={styles.label}>Time of arrival</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => setShowTimePicker(true)}>
+                            <TouchableOpacity style={styles.inputContainer} onPress={() => sSTP(true)}>
                                 <TextInput
                                     style={[styles.input, {paddingLeft: 50}]}
                                     placeholder="HH:MM"
@@ -357,22 +357,22 @@ const AddFlight = ({ flight }) => {
                                     editable={false}
                                 />
                                 <View style={styles.dateIcon}>
-                                    <Icons type={'time'} />
+                                    <Icns type={'time'} />
                                 </View>
                                 {arrivalTime ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setArrivalTime)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrivalTime)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                             </TouchableOpacity>
-                            {showTimePicker && (
+                            {sTP && (
                                 <DateTimePicker
                                     value={new Date()}
                                     mode="time"
                                     themeVariant="dark"
                                     is24Hour={false}
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleTimeChange}
+                                    onChange={hTC}
                                 />
                             )}
 
@@ -386,11 +386,11 @@ const AddFlight = ({ flight }) => {
                                     editable={false}
                                 />
                                 <View style={styles.dateIcon}>
-                                    <Icons type={'time'} />
+                                    <Icns type={'time'} />
                                 </View>
                                 {duration ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDuration)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setDuration)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                             </TouchableOpacity>
@@ -421,8 +421,8 @@ const AddFlight = ({ flight }) => {
                                     onChangeText={setCost}
                                 />
                                 {cost ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setCost)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setCost)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                             </View>
@@ -438,8 +438,8 @@ const AddFlight = ({ flight }) => {
                                     multiline
                                 />
                                 {comment ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setComment)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setComment)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                             </View>
@@ -600,4 +600,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default AddFlight;
+export default AF;

@@ -1,13 +1,13 @@
 import { View } from "react-native"
-import Profile from "../components/Profile"
-import Menu from "../components/Menu";
+import Lvls from "../components/Lvls"
+import M from "../components/M";
 
-const ProfileScreen = () => {
+const LvlsScrn = () => {
     return (
         <View style={styles.container}>
-            <Profile />
-            <View style={styles.menu}>
-                <Menu />
+            <Lvls />
+            <View style={styles.M}>
+                <M />
             </View>
         </View>
     )
@@ -18,7 +18,7 @@ const styles = {
         width: "100%",
         height: "100%",
     },
-    menu: {
+    M: {
         position: 'absolute',
         bottom: 40,
         left: 0,
@@ -26,4 +26,4 @@ const styles = {
     }
 }
 
-export default ProfileScreen;
+export default LvlsScrn;

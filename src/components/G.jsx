@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import Icons from './Icons';
+import Icns from './Icns';
 
 const { height } = Dimensions.get('window');
 
-const Game = ({ item }) => {
+const G = ({ item }) => {
     const navigation = useNavigation();
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [correctAnswers, setCorrectAnswers] = useState(0);
@@ -37,7 +37,7 @@ const Game = ({ item }) => {
         }
     };
 
-    const handleOptionPress = (isCorrect, index) => {
+    const hOP = (isCorrect, index) => {
         setSelectedOptionIndex(index);
 
         let updatedCorrectAnswers = correctAnswers;
@@ -87,14 +87,14 @@ const Game = ({ item }) => {
         }
     };
 
-    const handleTryAgain = () => {
+    const hTA = () => {
         setCorrectAnswers(0);
         setCurrentQuestionIndex(0);
         setSelectedOptionIndex(null);
         resetFailStatus();
     }
 
-    const renderQuestion = () => {
+    const rQ = () => {
         const currentQuestion = item.questions[currentQuestionIndex];
 
         return (
@@ -116,7 +116,7 @@ const Game = ({ item }) => {
                     <TouchableOpacity
                         key={index}
                         style={optionStyle}
-                        onPress={() => handleOptionPress(option.correct, index)}
+                        onPress={() => hOP(option.correct, index)}
                         disabled={selectedOptionIndex !== null}
                     >
                         <Text style={styles.optionText}>{option.option}</Text>
@@ -146,7 +146,7 @@ const Game = ({ item }) => {
             }
             <TouchableOpacity
                 style={styles.tryAgainBtn}
-                onPress={handleTryAgain}
+                onPress={hTA}
             >
                 <Text style={[styles.finishBtnText, {fontWeight: '600'}]}>Try again</Text>
             </TouchableOpacity>
@@ -165,14 +165,14 @@ const Game = ({ item }) => {
             <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12}}>
                 <TouchableOpacity style={{flexDirection: 'row', alignItems: 'center'}} onPress={() => navigation.goBack('')}>
                     <View style={{width: 17, height: 22, marginRight: 7}}>
-                        <Icons type={'back'} light />
+                        <Icns type={'back'} light />
                     </View>
                     <Text style={styles.upperText}>Back</Text>
                 </TouchableOpacity>
                 <Text style={styles.upperText}>{currentQuestionIndex + 1}/{item.questions.length + 1}</Text>
             </View>
 
-            {currentQuestionIndex < item.questions.length ? renderQuestion() : renderFinishScreen()}
+            {currentQuestionIndex < item.questions.length ? rQ() : renderFinishScreen()}
 
         </View>
     )
@@ -298,4 +298,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Game;
+export default G;

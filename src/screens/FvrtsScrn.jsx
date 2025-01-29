@@ -1,12 +1,10 @@
 import { View } from "react-native"
-import AddEvent from "../components/AddEvent"
+import Fvrts from "../components/Fvrts"
 
-const AddEventScreen = ({ route }) => {
-    const { event } = route.params || {};
-
+const FvrtsScrn = () => {
     return (
         <View style={styles.container}>
-            <AddEvent event={event} />
+            <Fvrts />
         </View>
     )
 }; 
@@ -18,4 +16,4 @@ const styles = {
     }
 }
 
-export default AddEventScreen;
+export default FvrtsScrn;

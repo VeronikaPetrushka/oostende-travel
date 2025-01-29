@@ -3,17 +3,17 @@ import { enableScreens } from 'react-native-screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import HomeScreen from './src/screens/HomeScreen';
-import DetailsScreen from './src/screens/DetailsScreen';
-import FavoritesScreen from './src/screens/FavoritesScreen';
-import TicketsScreen from './src/screens/TicketsScreen';
-import AddFlightScreen from './src/screens/AddFlightScreen';
-import AddHotelScreen from './src/screens/AddHotelScreen';
-import AddEventScreen from './src/screens/AddEventScreen';
-import FavTicketsScreen from './src/screens/FavTicketsScreen';
-import LevelsScreen from './src/screens/LevelsScreen';
-import GameScreen from './src/screens/GameScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
+import HScrn from './src/screens/HScrn';
+import DtlsScrn from './src/screens/DtlsScrn';
+import FvrtsScrn from './src/screens/FvrtsScrn';
+import TScrn from './src/screens/TScrn';
+import AFScrn from './src/screens/AFScrn';
+import AHScrn from './src/screens/AHScrn';
+import AEScrn from './src/screens/AEScrn';
+import FvrtTScrn from './src/screens/FvrtTScren';
+import LvlsScrn from './src/screens/LvlsScrn';
+import GScrn from './src/screens/GScrn';
+import PrflScrn from './src/screens/PrflScrn';
 
 enableScreens();
 
@@ -23,60 +23,60 @@ const App = () => {
     
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="HomeScreen">
+        <Stack.Navigator initialRouteName="HScrn">
             <Stack.Screen 
-                name="HomeScreen" 
-                component={HomeScreen} 
+                name="HScrn" 
+                component={HScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="DetailsScreen" 
-                component={DetailsScreen} 
+                name="DtlsScrn" 
+                component={DtlsScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="FavoritesScreen" 
-                component={FavoritesScreen} 
+                name="FvrtsScrn" 
+                component={FvrtsScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="TicketsScreen" 
-                component={TicketsScreen} 
+                name="TScrn" 
+                component={TScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="AddFlightScreen" 
-                component={AddFlightScreen} 
+                name="AFScrn" 
+                component={AFScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="AddHotelScreen" 
-                component={AddHotelScreen} 
+                name="AHScrn" 
+                component={AHScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="AddEventScreen" 
-                component={AddEventScreen} 
+                name="AEScrn" 
+                component={AEScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="FavTicketsScreen" 
-                component={FavTicketsScreen} 
+                name="FvrtTScrn" 
+                component={FvrtTScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="LevelsScreen" 
-                component={LevelsScreen} 
+                name="LvlsScrn" 
+                component={LvlsScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="GameScreen" 
-                component={GameScreen} 
+                name="GScrn" 
+                component={GScrn} 
                 options={{ headerShown: false }} 
             />
             <Stack.Screen 
-                name="ProfileScreen" 
-                component={ProfileScreen} 
+                name="PrflScrn" 
+                component={PrflScrn} 
                 options={{ headerShown: false }} 
             />
         </Stack.Navigator>

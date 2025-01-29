@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, StyleSheet, View, Text } from "react-native";
 import { useNavigation } from '@react-navigation/native';
-import Icons from './Icons';
+import Icns from './Icns';
 
-const Menu = () => {
+const M = () => {
     const navigation = useNavigation();
-    const [activeButton, setActiveButton] = useState('HomeScreen');
+    const [activeButton, setActiveButton] = useState('HScrn');
 
     const handleNavigate = (screen) => {
         setActiveButton(screen);
@@ -25,39 +25,39 @@ const Menu = () => {
         <View style={styles.container}>
 
                 <TouchableOpacity 
-                    style={[styles.button, activeButton === 'HomeScreen' && styles.activeBtn]} 
-                    onPress={() => handleNavigate('HomeScreen')}>
+                    style={[styles.button, activeButton === 'HScrn' && styles.activeBtn]} 
+                    onPress={() => handleNavigate('HScrn')}>
                     <View style={{width: 24, height: 24}}>
-                        <Icons type={'1'} active={activeButton === 'HomeScreen'}/>
+                        <Icns type={'1'} active={activeButton === 'HScrn'}/>
                     </View>
-                    {activeButton === 'HomeScreen' && <Text style={styles.activeBtnText}>Places</Text>}
+                    {activeButton === 'HScrn' && <Text style={styles.activeBtnText}>Places</Text>}
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                    style={[styles.button, activeButton === 'TicketsScreen' && styles.activeBtn]} 
-                    onPress={() => handleNavigate('TicketsScreen')}>
+                    style={[styles.button, activeButton === 'TScrn' && styles.activeBtn]} 
+                    onPress={() => handleNavigate('TScrn')}>
                     <View style={{width: 24, height: 24}}>
-                        <Icons type={'2'} active={activeButton === 'TicketsScreen'}/>
+                        <Icns type={'2'} active={activeButton === 'TScrn'}/>
                     </View>
-                    {activeButton === 'TicketsScreen' && <Text style={styles.activeBtnText}>Tickets</Text>}
+                    {activeButton === 'TScrn' && <Text style={styles.activeBtnText}>Tickets</Text>}
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                    style={[styles.button, activeButton === 'LevelsScreen' && styles.activeBtn]} 
-                    onPress={() => handleNavigate('LevelsScreen')}>
+                    style={[styles.button, activeButton === 'LvlsScrn' && styles.activeBtn]} 
+                    onPress={() => handleNavigate('LvlsScrn')}>
                     <View style={{width: 24, height: 24}}>
-                        <Icons type={'3'} active={activeButton === 'LevelsScreen'}/>
+                        <Icns type={'3'} active={activeButton === 'LvlsScrn'}/>
                     </View>
-                    {activeButton === 'LevelsScreen' && <Text style={styles.activeBtnText}>Game</Text>}
+                    {activeButton === 'LvlsScrn' && <Text style={styles.activeBtnText}>Game</Text>}
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                    style={[styles.button, activeButton === 'ProfileScreen' && styles.activeBtn]} 
-                    onPress={() => handleNavigate('ProfileScreen')}>
+                    style={[styles.button, activeButton === 'PrflScrn' && styles.activeBtn]} 
+                    onPress={() => handleNavigate('PrflScrn')}>
                     <View style={{width: 24, height: 24}}>
-                        <Icons type={'4'} active={activeButton === 'ProfileScreen'}/>
+                        <Icns type={'4'} active={activeButton === 'PrflScrn'}/>
                     </View>
-                    {activeButton === 'ProfileScreen' && <Text style={styles.activeBtnText}>Tools</Text>}
+                    {activeButton === 'PrflScrn' && <Text style={styles.activeBtnText}>Tools</Text>}
                 </TouchableOpacity>
 
         </View>
@@ -109,4 +109,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Menu;
+export default M;

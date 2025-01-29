@@ -1,12 +1,10 @@
 import { View } from "react-native"
-import AddFlight from "../components/AddFlight"
+import FvrtT from "../components/FvrtT"
 
-const AddFlightScreen = ({ route }) => {
-    const { flight } = route.params || {};
-
+const FvrtTScrn = () => {
     return (
         <View style={styles.container}>
-            <AddFlight flight={flight} />
+            <FvrtT />
         </View>
     )
 }; 
@@ -18,4 +16,4 @@ const styles = {
     }
 }
 
-export default AddFlightScreen;
+export default FvrtTScrn;

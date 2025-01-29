@@ -2,11 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView, Modal } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import Icons from "./Icons";
+import Icns from "./Icns";
 
-const { height, width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
-const Tickets = () => {
+const T = () => {
     const navigation = useNavigation();
     const [button, setButton] = useState('Flights');
     const [calendar, setCalendar] = useState(false);
@@ -36,9 +36,9 @@ const Tickets = () => {
         }
     };
 
-    const fetchFavorites = async () => {
-        const hotels = await getFavorites('favHotels');
-        const events = await getFavorites('favEvents');
+    const fF = async () => {
+        const hotels = await gF('favHotels');
+        const events = await gF('favEvents');
         setFavHotels(hotels);
         setFavEvents(events);
     };
@@ -46,7 +46,7 @@ const Tickets = () => {
     useFocusEffect(
         useCallback(() => {
             fetchData();
-            fetchFavorites();
+            fF();
         }, [])
     );
 
@@ -62,13 +62,13 @@ const Tickets = () => {
 
     console.log('filteredData: ', filteredData)
 
-    const handleAddItem = () => {
+    const hAI = () => {
         if(button === 'Flights') {
-            navigation.navigate('AddFlightScreen')
+            navigation.navigate('AFScrn')
         } else if (button === 'Hotels') {
-            navigation.navigate('AddHotelScreen')
+            navigation.navigate('AHScrn')
         } else if (button === 'Events') {
-            navigation.navigate('AddEventScreen')
+            navigation.navigate('AEScrn')
         }
     };
 
@@ -80,7 +80,7 @@ const Tickets = () => {
         setMoreInfoHotel((prevIndex) => (prevIndex === index ? null : index));
     };
 
-    const getFavorites = async (key) => {
+    const gF = async (key) => {
         try {
             const favorites = await AsyncStorage.getItem(key);
             return favorites ? JSON.parse(favorites) : [];
@@ -94,15 +94,15 @@ const Tickets = () => {
         return JSON.stringify(item1) === JSON.stringify(item2);
     };
 
-    const isFavorite = (favorites, item) => {
+    const ifF = (favorites, item) => {
         return favorites.some(fav => areItemsEqual(fav, item));
     };
 
-    const toggleFavorite = async (key, item, setFavorites) => {
+    const tF = async (key, item, setFavorites) => {
         try {
-            const favorites = await getFavorites(key);
+            const favorites = await gF(key);
     
-            if (isFavorite(favorites, item)) {
+            if (ifF(favorites, item)) {
                 const updatedFavorites = favorites.filter(fav => !areItemsEqual(fav, item));
                 await AsyncStorage.setItem(key, JSON.stringify(updatedFavorites));
                 setFavorites(updatedFavorites);
@@ -116,7 +116,7 @@ const Tickets = () => {
         }
     };    
 
-    const filteredByDate = date
+    const fBD = date
     ? filteredData.filter(item => {
         if (button === 'Flights') {
             const flightDate = item.arrivalDate;
@@ -173,7 +173,7 @@ const Tickets = () => {
                 setDeleteModalVisible(false);
 
                 await fetchData();
-                await fetchFavorites();
+                await fF();
 
             } catch (error) {
                 console.error('Error deleting item or favorite:', error);
@@ -184,7 +184,7 @@ const Tickets = () => {
     const renderHotels = (hotel, index) => (
         <View key={`hotel-${index}`} style={styles.hotelCard}>
             <TouchableOpacity style={styles.dots} onPress={() => handleDeleteDots(index)}>
-                <Icons type={'dots'} />
+                <Icns type={'dots'} />
             </TouchableOpacity>
             <Image source={{uri: hotel.cover}} style={styles.hotelCover} />
             <View style={styles.hotelUpperContainer}>
@@ -200,16 +200,16 @@ const Tickets = () => {
                 </View>
                 <TouchableOpacity 
                     style={{width: 27, height: 24}}
-                    onPress={() => toggleFavorite('favHotels', hotel, setFavHotels)}
+                    onPress={() => tF('favHotels', hotel, setFavHotels)}
                     >
-                    <Icons type={isFavorite(favHotels, hotel) ? 'fav-saved' : 'fav-not'} light={isFavorite(favHotels, hotel)} />
+                    <Icns type={ifF(favHotels, hotel) ? 'fav-saved' : 'fav-not'} light={ifF(favHotels, hotel)} />
                 </TouchableOpacity>
             </View>
 
             <View style={styles.moreInfoContainer}>
                 <Text style={styles.moreInfoText}>Additional information</Text>
                 <TouchableOpacity style={{width: 14, height: 12}} onPress={() => handleMoreInfoHotel(index)}>
-                    <Icons type={moreInfoHotel === index ? 'less' : 'more'} />
+                    <Icns type={moreInfoHotel === index ? 'less' : 'more'} />
                 </TouchableOpacity>
             </View>
 
@@ -273,7 +273,7 @@ const Tickets = () => {
             <View style={[styles.moreInfoContainer, {padding: 0, marginBottom: 12}]}>
                 <Text style={styles.moreInfoText}>Additional information</Text>
                 <TouchableOpacity style={{width: 14, height: 12}} onPress={() => handleMoreInfoFlight(index)}>
-                    <Icons type={moreInfoFlight === index ? 'less' : 'more'} />
+                    <Icns type={moreInfoFlight === index ? 'less' : 'more'} />
                 </TouchableOpacity>
             </View>
 
@@ -297,7 +297,7 @@ const Tickets = () => {
                             </View>
                         )}
                         <TouchableOpacity style={styles.dotsFlight} onPress={() => handleDeleteDots(index)}>
-                            <Icons type={'dots'} />
+                            <Icns type={'dots'} />
                         </TouchableOpacity>
                     </View>
                 )
@@ -309,7 +309,7 @@ const Tickets = () => {
     const renderEvents = (event, index) => (
         <View key={`event-${index}`} style={styles.hotelCard}>
             <TouchableOpacity style={styles.dots} onPress={() => handleDeleteDots(index)}>
-                <Icons type={'dots'} />
+                <Icns type={'dots'} />
             </TouchableOpacity>
             <Image source={{uri: event.cover}} style={styles.hotelCover} />
             <View style={styles.hotelUpperContainer}>
@@ -321,9 +321,9 @@ const Tickets = () => {
                 </View>
                 <TouchableOpacity 
                     style={{width: 27, height: 24}}
-                    onPress={() => toggleFavorite('favEvents', event, setFavEvents)}
+                    onPress={() => tF('favEvents', event, setFavEvents)}
                     >
-                    <Icons type={isFavorite(favEvents, event) ? 'fav-saved' : 'fav-not'} light={isFavorite(favEvents, event)} />
+                    <Icns type={ifF(favEvents, event) ? 'fav-saved' : 'fav-not'} light={ifF(favEvents, event)} />
                 </TouchableOpacity>
             </View>
 
@@ -341,8 +341,8 @@ const Tickets = () => {
                 <View style={styles.upperPanel}>
                     <Text style={styles.upperText}>Oostende Travel</Text>
                     <View style={{alignItems: 'center', flexDirection: 'row'}}>
-                        <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FavTicketsScreen')}>
-                            <Icons type={'fav'} />
+                        <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FvrtTScrn')}>
+                            <Icns type={'fav'} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -361,7 +361,7 @@ const Tickets = () => {
             </View>
 
                     <ScrollView style={{ width: '100%', padding: 16, backgroundColor: '#000' }}>
-                        {filteredByDate.map((item, index) =>
+                        {fBD.map((item, index) =>
                             button === 'Flights'
                                 ? renderFlights(item, index)
                                 : button === 'Hotels'
@@ -369,7 +369,7 @@ const Tickets = () => {
                                 : renderEvents(item, index)
                         )}
                         {
-                            filteredByDate.length === 0 && (
+                            fBD.length === 0 && (
                                 <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
                                     <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24, resizeMode: 'contain'}} />
                                     <Text style={styles.nothingText}>{`There aren’t any ${button === 'Flights' ? 'flights' : button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
@@ -379,8 +379,8 @@ const Tickets = () => {
                         <View style={{ height: 120 }} />
                     </ScrollView>
 
-            <TouchableOpacity style={styles.addBtn} onPress={handleAddItem}>
-                <Icons type={'plus'} />
+            <TouchableOpacity style={styles.addBtn} onPress={hAI}>
+                <Icns type={'plus'} />
             </TouchableOpacity>
 
             <Modal
@@ -692,4 +692,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Tickets;
+export default T;

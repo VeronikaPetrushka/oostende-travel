@@ -2,32 +2,30 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import Icons from "./Icons";
+import Icns from "./Icns";
 
-const { height, width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
-const FavTickets = () => {
+const FvrtT = () => {
     const navigation = useNavigation();
     const [button, setButton] = useState('Hotels');
-    const [calendar, setCalendar] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
-    const [date, setDate] = useState(null);
 
     const [favHotels, setFavHotels] = useState([]);
     const [favEvents, setFavEvents] = useState([]);
 
     const [moreInfoHotel, setMoreInfoHotel] = useState(false);
 
-    const fetchFavorites = async () => {
-        const hotels = await getFavorites('favHotels');
-        const events = await getFavorites('favEvents');
+    const fF = async () => {
+        const hotels = await gF('favHotels');
+        const events = await gF('favEvents');
         setFavHotels(hotels);
         setFavEvents(events);
     };
 
     useFocusEffect(
         useCallback(() => {
-            fetchFavorites();
+            fF();
         }, [])
     );    
 
@@ -43,7 +41,7 @@ const FavTickets = () => {
         setMoreInfoHotel((prevIndex) => (prevIndex === index ? null : index));
     };
 
-    const getFavorites = async (key) => {
+    const gF = async (key) => {
         try {
             const favorites = await AsyncStorage.getItem(key);
             return favorites ? JSON.parse(favorites) : [];
@@ -57,15 +55,15 @@ const FavTickets = () => {
         return JSON.stringify(item1) === JSON.stringify(item2);
     };
 
-    const isFavorite = (favorites, item) => {
+    const ifF = (favorites, item) => {
         return favorites.some(fav => areItemsEqual(fav, item));
     };
 
-    const toggleFavorite = async (key, item, setFavorites) => {
+    const tF = async (key, item, setFavorites) => {
         try {
-            const favorites = await getFavorites(key);
+            const favorites = await gF(key);
     
-            if (isFavorite(favorites, item)) {
+            if (ifF(favorites, item)) {
                 const updatedFavorites = favorites.filter(fav => !areItemsEqual(fav, item));
                 await AsyncStorage.setItem(key, JSON.stringify(updatedFavorites));
                 setFavorites(updatedFavorites);
@@ -89,16 +87,16 @@ const FavTickets = () => {
                 </View>
                 <TouchableOpacity 
                     style={{width: 27, height: 24}}
-                    onPress={() => toggleFavorite('favHotels', hotel, setFavHotels)}
+                    onPress={() => tF('favHotels', hotel, setFavHotels)}
                     >
-                    <Icons type={isFavorite(favHotels, hotel) ? 'fav-saved' : 'fav-not'} light={isFavorite(favHotels, hotel)} />
+                    <Icns type={ifF(favHotels, hotel) ? 'fav-saved' : 'fav-not'} light={ifF(favHotels, hotel)} />
                 </TouchableOpacity>
             </View>
 
             <View style={styles.moreInfoContainer}>
                 <Text style={styles.moreInfoText}>Additional information</Text>
                 <TouchableOpacity style={{width: 14, height: 12}} onPress={() => handleMoreInfoHotel(index)}>
-                    <Icons type={moreInfoHotel === index ? 'less' : 'more'} />
+                    <Icns type={moreInfoHotel === index ? 'less' : 'more'} />
                 </TouchableOpacity>
             </View>
 
@@ -146,9 +144,9 @@ const FavTickets = () => {
                 </View>
                 <TouchableOpacity 
                     style={{width: 27, height: 24}}
-                    onPress={() => toggleFavorite('favEvents', event, setFavEvents)}
+                    onPress={() => tF('favEvents', event, setFavEvents)}
                     >
-                    <Icons type={isFavorite(favEvents, event) ? 'fav-saved' : 'fav-not'} light={isFavorite(favEvents, event)} />
+                    <Icns type={ifF(favEvents, event) ? 'fav-saved' : 'fav-not'} light={ifF(favEvents, event)} />
                 </TouchableOpacity>
             </View>
 
@@ -167,7 +165,7 @@ const FavTickets = () => {
                     <Text style={styles.upperText}>Your Favorites</Text>
                     <View style={{alignItems: 'center', flexDirection: 'row'}}>
                         <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack('')}>
-                            <Icons type={'back'} />
+                            <Icns type={'back'} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -420,4 +418,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default FavTickets;
+export default FvrtT;

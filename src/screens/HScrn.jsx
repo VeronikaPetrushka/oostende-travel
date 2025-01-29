@@ -1,13 +1,13 @@
 import { View } from "react-native"
-import Home from "../components/Home"
-import Menu from "../components/Menu";
+import H from "../components/H"
+import M from "../components/M";
 
-const HomeScreen = () => {
+const HScrn = () => {
     return (
         <View style={styles.container}>
-            <Home />
-            <View style={styles.menu}>
-                <Menu />
+            <H />
+            <View style={styles.M}>
+                <M />
             </View>
         </View>
     )
@@ -18,7 +18,7 @@ const styles = {
         width: "100%",
         height: "100%",
     },
-    menu: {
+    M: {
         position: 'absolute',
         bottom: 40,
         left: 0,
@@ -26,4 +26,4 @@ const styles = {
     }
 }
 
-export default HomeScreen;
+export default HScrn;

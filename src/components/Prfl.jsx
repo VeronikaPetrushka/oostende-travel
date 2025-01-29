@@ -1,16 +1,16 @@
 import { View, Text, TouchableOpacity, Dimensions, StyleSheet, Linking } from "react-native"
-import Icons from './Icons';
+import Icns from './Icns';
 
 const { height } = Dimensions.get('window');
 
-const Profile = () => {
+const Prfl = () => {
 
-    const handlePrivacyPolicy = () => {
+    const hpp = () => {
         const url = 'https://www.termsfeed.com/live/c46fccda-3dbd-4d32-b1f6-837200b19946';
         Linking.openURL(url).catch((err) => console.error('Failed to open URL:', err));
     };    
 
-    const handleRateApp = () => {
+    const hra = () => {
         const url = Platform.select({
             ios: 'https://apps.apple.com/us/app/oostende-travel/id6740922984',
         });
@@ -28,14 +28,14 @@ const Profile = () => {
             <View style={{width: '100%', paddingHorizontal: 16}}>
                 <View style={styles.btn}>
                     <Text style={styles.btnText}>Privacy Policy</Text>
-                    <TouchableOpacity style={styles.policyIcon} onPress={handlePrivacyPolicy}>
-                        <Icons type={'policy'} />
+                    <TouchableOpacity style={styles.policyIcon} onPress={hpp}>
+                        <Icns type={'policy'} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.btn}>
                     <Text style={styles.btnText}>Rate us</Text>
-                    <TouchableOpacity style={styles.policyIcon} onPress={handleRateApp}>
-                        <Icons type={'rate'} />
+                    <TouchableOpacity style={styles.policyIcon} onPress={hra}>
+                        <Icns type={'rate'} />
                     </TouchableOpacity>
                 </View>
 
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Profile;
+export default Prfl;

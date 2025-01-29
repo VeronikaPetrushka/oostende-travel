@@ -1,13 +1,13 @@
 import { View } from "react-native"
-import Tickets from "../components/Tickets"
-import Menu from "../components/Menu";
+import T from "../components/T"
+import M from "../components/M";
 
-const TicketsScreen = () => {
+const TScrn = () => {
     return (
         <View style={styles.container}>
-            <Tickets />
-            <View style={styles.menu}>
-                <Menu />
+            <T />
+            <View style={styles.M}>
+                <M />
             </View>
         </View>
     )
@@ -18,7 +18,7 @@ const styles = {
         width: "100%",
         height: "100%",
     },
-    menu: {
+    M: {
         position: 'absolute',
         bottom: 40,
         left: 0,
@@ -26,4 +26,4 @@ const styles = {
     }
 }
 
-export default TicketsScreen;
+export default TScrn;

@@ -1,12 +1,12 @@
 import { View } from "react-native"
-import Details from "../components/Details"
+import AH from "../components/AH"
 
-const DetailsScreen = ({ route }) => {
-    const { place } = route.params;
+const AHScrn = ({ route }) => {
+    const { hotel } = route.params || {};
 
     return (
         <View style={styles.container}>
-            <Details place={place} />
+            <AH hotel={hotel} />
         </View>
     )
 }; 
@@ -18,4 +18,4 @@ const styles = {
     }
 }
 
-export default DetailsScreen;
+export default AHScrn;

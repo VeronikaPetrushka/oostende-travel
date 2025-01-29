@@ -1,12 +1,12 @@
 import { View } from "react-native"
-import Game from "../components/Game"
+import AF from "../components/AF"
 
-const GameScreen = ({ route }) => {
-    const { item } = route.params;
+const AFScrn = ({ route }) => {
+    const { flight } = route.params || {};
 
     return (
         <View style={styles.container}>
-            <Game item={item} />
+            <AF flight={flight} />
         </View>
     )
 }; 
@@ -18,4 +18,4 @@ const styles = {
     }
 }
 
-export default GameScreen;
+export default AFScrn;

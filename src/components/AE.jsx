@@ -4,11 +4,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary } from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
-import Icons from './Icons';
+import Icns from './Icns';
 
 const { height } = Dimensions.get('window');
 
-const AddEvent = ({ event }) => {
+const AE = ({ event }) => {
     const navigation = useNavigation();
     const [name, setName] = useState(event ? event.name : '');
     const [description, setDescription] = useState(event ? event.description : '');
@@ -16,10 +16,10 @@ const AddEvent = ({ event }) => {
     const [startTime, setStartTime] = useState(event ? event.startTime : '');
     const [endTime, setEndTime] = useState(event ? event.endTime : '');
     const [cover, setCover] = useState(event ? event.cover : null);
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [showTimePicker, setShowTimePicker] = useState(false);
+    const [sDP, sSDP] = useState(false);
+    const [sTP, sSTP] = useState(false);
 
-    const resetInput = (setter) => {
+    const resIn = (setter) => {
         setter('');
     };
         
@@ -31,12 +31,12 @@ const AddEvent = ({ event }) => {
         });
     };
 
-    const resetImage = () => {
+    const resIm = () => {
         setCover(null);
     };
 
-    const handleDateChange = (event, selectedDate) => {
-        setShowDatePicker(false);
+    const hDC = (event, selectedDate) => {
+        sSDP(false);
     
         if (selectedDate) {
             const now = new Date();
@@ -57,8 +57,8 @@ const AddEvent = ({ event }) => {
         }
     };    
 
-    const handleTimeChange = (event, selectedTime) => {
-        setShowTimePicker(false);
+    const hTC = (event, selectedTime) => {
+        sSTP(false);
 
         if (selectedTime) {
             const hours = selectedTime.getHours();
@@ -75,7 +75,7 @@ const AddEvent = ({ event }) => {
         }
     };
 
-    const handleSave = async () => {
+    const hS = async () => {
         if (!name || !description || !date || !startTime || !endTime || !cover) {
             alert('Please fill out all fields to proceed.');
             return;
@@ -122,7 +122,7 @@ const AddEvent = ({ event }) => {
 
             <View style={styles.upperContainer}>
                 <TouchableOpacity style={styles.back} onPress={() => navigation.goBack('')}>
-                    <Icons type={'back'} light />
+                    <Icns type={'back'} light />
                 </TouchableOpacity>
                 <Text style={[styles.label, {marginBottom: 0, fontSize: 17, lineHeight: 22, color: '#ffcc02'}]}>Back</Text>
             </View>
@@ -140,8 +140,8 @@ const AddEvent = ({ event }) => {
                         onChangeText={setName}
                     />
                     {name ? (
-                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setName)}>
-                            <Icons type={'cross'} />
+                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setName)}>
+                            <Icns type={'cross'} />
                         </TouchableOpacity>
                     ) : null}
                 </View>
@@ -157,14 +157,14 @@ const AddEvent = ({ event }) => {
                         multiline
                     />
                     {description ? (
-                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDescription)}>
-                            <Icons type={'cross'} />
+                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setDescription)}>
+                            <Icns type={'cross'} />
                         </TouchableOpacity>
                     ) : null}
                 </View>
 
                 <Text style={styles.label}>Date</Text>
-                <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
+                <TouchableOpacity style={styles.inputContainer} onPress={() => sSDP(true)}>
                     <TextInput
                         style={[styles.input, {paddingLeft: 50}]}
                         placeholder="DD.MM.YYYY"
@@ -173,28 +173,28 @@ const AddEvent = ({ event }) => {
                         editable={false}
                     />
                     <View style={styles.dateIcon}>
-                        <Icons type={'calendar'} />
+                        <Icns type={'calendar'} />
                     </View>
                     {date ? (
-                        <TouchableOpacity style={styles.cross} onPress={() => resetInput(setDate)}>
-                            <Icons type={'cross'} />
+                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setDate)}>
+                            <Icns type={'cross'} />
                         </TouchableOpacity>
                     ) : null}
                 </TouchableOpacity>
-                {showDatePicker && (
+                {sDP && (
                     <DateTimePicker
                         value={new Date()}
                         mode="date"
                         themeVariant='dark'
                         display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                        onChange={handleDateChange}
+                        onChange={hDC}
                     />
                 )}
 
                 <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24}}>
                     <View style={{width: '47%', alignItems: 'flex-start'}}>
                         <Text style={styles.label}>Start time</Text>
-                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => setShowTimePicker(true)}>
+                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => sSTP(true)}>
                             <TextInput
                                 style={[styles.input, {paddingLeft: 40}]}
                                 placeholder="HH:MM"
@@ -203,18 +203,18 @@ const AddEvent = ({ event }) => {
                                 editable={false}
                             />
                             <View style={styles.dateIcon}>
-                                <Icons type={'time'} />
+                                <Icns type={'time'} />
                             </View>
                             {startTime ? (
-                                <TouchableOpacity style={styles.cross} onPress={() => resetInput(setStartTime)}>
-                                    <Icons type={'cross'} />
+                                <TouchableOpacity style={styles.cross} onPress={() => resIn(setStartTime)}>
+                                    <Icns type={'cross'} />
                                 </TouchableOpacity>
                             ) : null}
                         </TouchableOpacity>
                     </View>
                     <View style={{width: '47%', alignItems: 'flex-start'}}>
                         <Text style={styles.label}>End time</Text>
-                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => setShowTimePicker(true)}>
+                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => sSTP(true)}>
                             <TextInput
                                     style={[styles.input, {paddingLeft: 40}]}
                                     placeholder="HH:MM"
@@ -223,23 +223,23 @@ const AddEvent = ({ event }) => {
                                     editable={false}
                                 />
                                 <View style={styles.dateIcon}>
-                                    <Icons type={'time'} />
+                                    <Icns type={'time'} />
                                 </View>
                                 {endTime ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resetInput(setEndTime)}>
-                                        <Icons type={'cross'} />
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setEndTime)}>
+                                        <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
                         </TouchableOpacity>
                     </View>
                 </View>
-                {showTimePicker && (
+                {sTP && (
                     <DateTimePicker
                         value={new Date()}
                         mode="time"
                         themeVariant='dark'
                         display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                        onChange={handleTimeChange}
+                        onChange={hTC}
                     />
                 )}
 
@@ -248,13 +248,13 @@ const AddEvent = ({ event }) => {
                     {cover ? (
                         <>
                             <Image source={{ uri: cover }} style={styles.uploadedImage} />
-                            <TouchableOpacity style={styles.crossImg} onPress={resetImage}>
-                                <Icons type={'cross'} />
+                            <TouchableOpacity style={styles.crossImg} onPress={resIm}>
+                                <Icns type={'cross'} />
                             </TouchableOpacity>
                         </>
                     ) : (
                         <TouchableOpacity style={styles.add} onPress={handleCoverPicker}>
-                            <Icons type={'plus'} />
+                            <Icns type={'plus'} />
                         </TouchableOpacity>
                     )}
                 </View>
@@ -263,7 +263,7 @@ const AddEvent = ({ event }) => {
 
             </ScrollView>
 
-            <TouchableOpacity style={styles.saveBtn} onPress={handleSave}>
+            <TouchableOpacity style={styles.saveBtn} onPress={hS}>
                 <Text style={styles.saveBtnText}>Save</Text>
             </TouchableOpacity>
 
@@ -407,4 +407,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default AddEvent;
+export default AE;

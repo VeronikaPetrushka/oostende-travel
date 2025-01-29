@@ -1,10 +1,12 @@
 import { View } from "react-native"
-import Favorites from "../components/Favorites"
+import Dtls from "../components/Dtls"
 
-const FavoritesScreen = () => {
+const DtlsScrn = ({ route }) => {
+    const { place } = route.params;
+
     return (
         <View style={styles.container}>
-            <Favorites />
+            <Dtls place={place} />
         </View>
     )
 }; 
@@ -16,4 +18,4 @@ const styles = {
     }
 }
 
-export default FavoritesScreen;
+export default DtlsScrn;

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { TouchableOpacity, View, Text, ScrollView, Dimensions, StyleSheet, Image } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
-import Icons from './Icons';
+import Icns from './Icns';
 
 const { height } = Dimensions.get('window');
 
-const Details = ({ place }) => {
+const Dtls = ({ place }) => {
     const navigation = useNavigation();
     const [favorites, setFavorites] = useState([]);
 
@@ -25,7 +25,7 @@ const Details = ({ place }) => {
         loadFavorites();
     }, []);
 
-    const saveFavorites = async (placeToFav) => {
+    const sF = async (placeToFav) => {
         try {
             const isAlreadyFav = favorites.some((place) => place.name === placeToFav.name);
 
@@ -49,7 +49,7 @@ const Details = ({ place }) => {
         <View style={styles.container}>
             <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack('')}>
                 <View style={{width: 17, height: 22, marginRight: 5}}>
-                    <Icons type={'back'} light />
+                    <Icns type={'back'} light />
                 </View>
                 <Text style={styles.backBtnText}>Back</Text>
             </TouchableOpacity>
@@ -59,8 +59,8 @@ const Details = ({ place }) => {
 
                 <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexDirection: 'row'}}>
                     <Text style={styles.name}>{place.name}</Text>
-                    <TouchableOpacity style={{width: 31, height: 28}} onPress={() => saveFavorites(place)}>
-                        <Icons type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} light={favorites.some((fav) => fav.name === place.name)} />
+                    <TouchableOpacity style={{width: 31, height: 28}} onPress={() => sF(place)}>
+                        <Icns type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} light={favorites.some((fav) => fav.name === place.name)} />
                     </TouchableOpacity>
                 </View>
 
@@ -135,4 +135,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Details;
+export default Dtls;
