@@ -9,7 +9,6 @@ const { height } = Dimensions.get('window');
 const T = () => {
     const navigation = useNavigation();
     const [button, setButton] = useState('Flights');
-    const [calendar, setCalendar] = useState(false);
     const [data, setData] = useState({ hotels: [], flights: [], events: [] });
     const [filteredData, setFilteredData] = useState([]);
     const [date, setDate] = useState(null);

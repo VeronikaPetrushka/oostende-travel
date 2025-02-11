@@ -43,15 +43,6 @@ const M = () => {
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                    style={[styles.button, activeButton === 'LvlsScrn' && styles.activeBtn]} 
-                    onPress={() => handleNavigate('LvlsScrn')}>
-                    <View style={{width: 24, height: 24}}>
-                        <Icns type={'3'} active={activeButton === 'LvlsScrn'}/>
-                    </View>
-                    {activeButton === 'LvlsScrn' && <Text style={styles.activeBtnText}>Game</Text>}
-                </TouchableOpacity>
-
-                <TouchableOpacity 
                     style={[styles.button, activeButton === 'PrflScrn' && styles.activeBtn]} 
                     onPress={() => handleNavigate('PrflScrn')}>
                     <View style={{width: 24, height: 24}}>
