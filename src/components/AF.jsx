@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, TextInput, Dimensions, StyleSheet, ScrollView } from "react-native"
+import { View, Text, TouchableOpacity, TextInput, Dimensions, StyleSheet, ScrollView, ImageBackground } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
@@ -162,299 +162,301 @@ const AF = ({ flight }) => {
     };
     
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
 
-            <View style={styles.upperContainer}>
-                <TouchableOpacity style={styles.back} onPress={() => navigation.goBack('')}>
-                    <Icns type={'back'} light />
+                <View style={styles.upperContainer}>
+                    <TouchableOpacity style={styles.back} onPress={() => navigation.goBack('')}>
+                        <Icns type={'back'} light />
+                    </TouchableOpacity>
+                    <Text style={[styles.label, {marginBottom: 0, fontSize: 17, lineHeight: 22, color: '#ffcc02'}]}>Back</Text>
+                </View>
+
+                <Text style={styles.title}>Add a flight</Text>
+
+                <ScrollView style={{width: '100%'}}>
+                    {
+                        step === 1 && (
+                            <View style={{width: '100%'}}>
+                                <Text style={styles.label}>Point of departure</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Point name"
+                                        placeholderTextColor="#999"
+                                        value={departure}
+                                        onChangeText={setDeparture}
+                                    />
+                                    {departure ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setDeparture)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </View>
+
+                                <Text style={styles.label}>Point of arrival</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Point name"
+                                        placeholderTextColor="#999"
+                                        value={arrival}
+                                        onChangeText={setArrival}
+                                    />
+                                    {arrival ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrival)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </View>
+
+                                <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 16}}>
+                                    <Text style={[styles.label, {marginBottom: 0}]}>Passengers</Text>
+                                    <View style={styles.countContainer}>
+                                        <TouchableOpacity 
+                                            style={{width: 18, height: 3, opacity: passengers === 1 ? 0.5 : 1}}
+                                            disabled={passengers === 1}
+                                            onPress={() => setPassengers((prev) => Math.max(prev - 1, 1))}
+                                        >
+                                            <Icns type={'minus'} />
+                                        </TouchableOpacity>
+                                            <Text style={styles.countText}>{passengers}</Text>
+                                        <TouchableOpacity 
+                                            style={{width: 18, height: 18}} 
+                                            onPress={() => setPassengers((prev) => prev + 1)}
+                                        >
+                                            <Icns type={'add'} />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+
+                                <Text style={styles.label}>Class</Text>
+
+                                <ScrollView contentContainerStyle={styles.panelContainer} horizontal={true}>
+                                    <TouchableOpacity 
+                                        style={[styles.panelBtn, classChosen === 'Economy' && {backgroundColor: '#ffcc02'}]}
+                                        onPress={() => setClassChosen('Economy')}
+                                        >
+                                        <Text style={styles.panelBtnText}>Economy</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity  
+                                        style={[styles.panelBtn, classChosen === 'Standard' && {backgroundColor: '#ffcc02'}]}
+                                        onPress={() => setClassChosen('Standard')}
+                                        >
+                                        <Text style={styles.panelBtnText}>Standard</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity 
+                                        style={[styles.panelBtn, {borderRightWidth: 0}, classChosen === 'Business' && {backgroundColor: '#ffcc02'}]}
+                                        onPress={() => setClassChosen('Business')}
+                                        >
+                                        <Text style={styles.panelBtnText}>Business</Text>
+                                    </TouchableOpacity>
+                                </ScrollView>
+                            </View>
+                        )
+                    }
+                    {
+                        step === 2 && (
+                            <>
+                                <Text style={styles.label}>Date of departure</Text>
+                                <TouchableOpacity style={styles.inputContainer} onPress={() => sSDP(true)}>
+                                    <TextInput
+                                        style={[styles.input, {paddingLeft: 50}]}
+                                        placeholder="DD.MM.YYYY"
+                                        placeholderTextColor="#999"
+                                        value={departureDate}
+                                        editable={false}
+                                    />
+                                    <View style={styles.dateIcon}>
+                                        <Icns type={'calendar'} />
+                                    </View>
+                                    {departureDate ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setDepartureDate)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </TouchableOpacity>
+                                {sDP && (
+                                    <DateTimePicker
+                                        value={new Date()}
+                                        mode="date"
+                                        themeVariant="dark"
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        onChange={hDC}
+                                    />
+                                )}
+
+                                <Text style={styles.label}>Time of departure</Text>
+                                <TouchableOpacity style={styles.inputContainer} onPress={() => sSTP(true)}>
+                                    <TextInput
+                                        style={[styles.input, {paddingLeft: 50}]}
+                                        placeholder="HH:MM"
+                                        placeholderTextColor="#999"
+                                        value={departureTime}
+                                        editable={false}
+                                    />
+                                    <View style={styles.dateIcon}>
+                                        <Icns type={'time'} />
+                                    </View>
+                                    {departureTime ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setDepartureTime)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </TouchableOpacity>
+                                {sTP && (
+                                    <DateTimePicker
+                                        value={new Date()}
+                                        mode="time"
+                                        themeVariant="dark"
+                                        is24Hour={false}
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        onChange={hTC}
+                                    />
+                                )}
+                            </>
+                        )
+                    }
+                    {
+                        step === 3 && (
+                            <>
+                                <Text style={styles.label}>Date of arrival</Text>
+                                <TouchableOpacity style={styles.inputContainer} onPress={() => sSDP(true)}>
+                                    <TextInput
+                                        style={[styles.input, {paddingLeft: 50}]}
+                                        placeholder="DD.MM.YYYY"
+                                        placeholderTextColor="#999"
+                                        value={arrivalDate}
+                                        editable={false}
+                                    />
+                                    <View style={styles.dateIcon}>
+                                        <Icns type={'calendar'} />
+                                    </View>
+                                    {arrivalDate ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrivalDate)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </TouchableOpacity>
+                                {sDP && (
+                                    <DateTimePicker
+                                        value={new Date()}
+                                        mode="date"
+                                        themeVariant="dark"
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        onChange={hDC}
+                                    />
+                                )}
+
+                                <Text style={styles.label}>Time of arrival</Text>
+                                <TouchableOpacity style={styles.inputContainer} onPress={() => sSTP(true)}>
+                                    <TextInput
+                                        style={[styles.input, {paddingLeft: 50}]}
+                                        placeholder="HH:MM"
+                                        placeholderTextColor="#999"
+                                        value={arrivalTime}
+                                        editable={false}
+                                    />
+                                    <View style={styles.dateIcon}>
+                                        <Icns type={'time'} />
+                                    </View>
+                                    {arrivalTime ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrivalTime)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </TouchableOpacity>
+                                {sTP && (
+                                    <DateTimePicker
+                                        value={new Date()}
+                                        mode="time"
+                                        themeVariant="dark"
+                                        is24Hour={false}
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        onChange={hTC}
+                                    />
+                                )}
+
+                                <Text style={styles.label}>Duration of the flight</Text>
+                                <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDurationPicker(true)}>
+                                    <TextInput
+                                        style={[styles.input, {paddingLeft: 50}]}
+                                        placeholder="HH:MM"
+                                        placeholderTextColor="#999"
+                                        value={duration}
+                                        editable={false}
+                                    />
+                                    <View style={styles.dateIcon}>
+                                        <Icns type={'time'} />
+                                    </View>
+                                    {duration ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setDuration)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </TouchableOpacity>
+                                {showDurationPicker && (
+                                    <DateTimePicker
+                                        value={new Date()}
+                                        mode="time"
+                                        themeVariant="dark"
+                                        is24Hour={false}
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        onChange={handleDurationChange}
+                                    />
+                                )}
+                            </>
+                        )
+                    }
+                    {
+                        step === 4 && (
+                            <>
+                            <Text style={styles.label}>Flight cost</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        keyboardType='numeric'
+                                        placeholder="How much did you pay in $ ?"
+                                        placeholderTextColor="#999"
+                                        value={cost}
+                                        onChangeText={setCost}
+                                    />
+                                    {cost ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setCost)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </View>
+
+                            <Text style={styles.label}>Comment</Text>
+                                <View style={styles.inputContainer}>
+                                    <TextInput
+                                        style={styles.input}
+                                        placeholder="Add comment to your flight"
+                                        placeholderTextColor="#999"
+                                        value={comment}
+                                        onChangeText={setComment}
+                                        multiline
+                                    />
+                                    {comment ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setComment)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                                </View>
+                            </>
+                        )
+                    }
+
+                    <View style={{height: 120}} />
+                </ScrollView>
+
+                <TouchableOpacity style={styles.saveBtn} onPress={handleNext}>
+                    <Text style={styles.saveBtnText}>{step != 4 ? 'Next' : 'Save'}</Text>
                 </TouchableOpacity>
-                <Text style={[styles.label, {marginBottom: 0, fontSize: 17, lineHeight: 22, color: '#ffcc02'}]}>Back</Text>
+
             </View>
-
-            <Text style={styles.title}>Add a flight</Text>
-
-            <ScrollView style={{width: '100%'}}>
-                {
-                    step === 1 && (
-                        <View style={{width: '100%'}}>
-                            <Text style={styles.label}>Point of departure</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Point name"
-                                    placeholderTextColor="#999"
-                                    value={departure}
-                                    onChangeText={setDeparture}
-                                />
-                                {departure ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setDeparture)}>
-                                        <Icns type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </View>
-
-                            <Text style={styles.label}>Point of arrival</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Point name"
-                                    placeholderTextColor="#999"
-                                    value={arrival}
-                                    onChangeText={setArrival}
-                                />
-                                {arrival ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrival)}>
-                                        <Icns type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </View>
-
-                            <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', marginBottom: 16}}>
-                                <Text style={[styles.label, {marginBottom: 0}]}>Passengers</Text>
-                                <View style={styles.countContainer}>
-                                    <TouchableOpacity 
-                                        style={{width: 18, height: 3, opacity: passengers === 1 ? 0.5 : 1}}
-                                        disabled={passengers === 1}
-                                        onPress={() => setPassengers((prev) => Math.max(prev - 1, 1))}
-                                    >
-                                        <Icns type={'minus'} />
-                                    </TouchableOpacity>
-                                        <Text style={styles.countText}>{passengers}</Text>
-                                    <TouchableOpacity 
-                                        style={{width: 18, height: 18}} 
-                                        onPress={() => setPassengers((prev) => prev + 1)}
-                                    >
-                                        <Icns type={'add'} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-
-                            <Text style={styles.label}>Class</Text>
-
-                            <ScrollView contentContainerStyle={styles.panelContainer} horizontal={true}>
-                                <TouchableOpacity 
-                                    style={[styles.panelBtn, classChosen === 'Economy' && {backgroundColor: '#ffcc02'}]}
-                                    onPress={() => setClassChosen('Economy')}
-                                    >
-                                    <Text style={styles.panelBtnText}>Economy</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity  
-                                    style={[styles.panelBtn, classChosen === 'Standard' && {backgroundColor: '#ffcc02'}]}
-                                    onPress={() => setClassChosen('Standard')}
-                                    >
-                                    <Text style={styles.panelBtnText}>Standard</Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity 
-                                    style={[styles.panelBtn, {borderRightWidth: 0}, classChosen === 'Business' && {backgroundColor: '#ffcc02'}]}
-                                    onPress={() => setClassChosen('Business')}
-                                    >
-                                    <Text style={styles.panelBtnText}>Business</Text>
-                                </TouchableOpacity>
-                            </ScrollView>
-                        </View>
-                    )
-                }
-                {
-                    step === 2 && (
-                        <>
-                            <Text style={styles.label}>Date of departure</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => sSDP(true)}>
-                                <TextInput
-                                    style={[styles.input, {paddingLeft: 50}]}
-                                    placeholder="DD.MM.YYYY"
-                                    placeholderTextColor="#999"
-                                    value={departureDate}
-                                    editable={false}
-                                />
-                                <View style={styles.dateIcon}>
-                                    <Icns type={'calendar'} />
-                                </View>
-                                {departureDate ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setDepartureDate)}>
-                                        <Icns type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </TouchableOpacity>
-                            {sDP && (
-                                <DateTimePicker
-                                    value={new Date()}
-                                    mode="date"
-                                    themeVariant="dark"
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={hDC}
-                                />
-                            )}
-
-                            <Text style={styles.label}>Time of departure</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => sSTP(true)}>
-                                <TextInput
-                                    style={[styles.input, {paddingLeft: 50}]}
-                                    placeholder="HH:MM"
-                                    placeholderTextColor="#999"
-                                    value={departureTime}
-                                    editable={false}
-                                />
-                                <View style={styles.dateIcon}>
-                                    <Icns type={'time'} />
-                                </View>
-                                {departureTime ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setDepartureTime)}>
-                                        <Icns type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </TouchableOpacity>
-                            {sTP && (
-                                <DateTimePicker
-                                    value={new Date()}
-                                    mode="time"
-                                    themeVariant="dark"
-                                    is24Hour={false}
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={hTC}
-                                />
-                            )}
-                        </>
-                    )
-                }
-                {
-                    step === 3 && (
-                        <>
-                            <Text style={styles.label}>Date of arrival</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => sSDP(true)}>
-                                <TextInput
-                                    style={[styles.input, {paddingLeft: 50}]}
-                                    placeholder="DD.MM.YYYY"
-                                    placeholderTextColor="#999"
-                                    value={arrivalDate}
-                                    editable={false}
-                                />
-                                <View style={styles.dateIcon}>
-                                    <Icns type={'calendar'} />
-                                </View>
-                                {arrivalDate ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrivalDate)}>
-                                        <Icns type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </TouchableOpacity>
-                            {sDP && (
-                                <DateTimePicker
-                                    value={new Date()}
-                                    mode="date"
-                                    themeVariant="dark"
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={hDC}
-                                />
-                            )}
-
-                            <Text style={styles.label}>Time of arrival</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => sSTP(true)}>
-                                <TextInput
-                                    style={[styles.input, {paddingLeft: 50}]}
-                                    placeholder="HH:MM"
-                                    placeholderTextColor="#999"
-                                    value={arrivalTime}
-                                    editable={false}
-                                />
-                                <View style={styles.dateIcon}>
-                                    <Icns type={'time'} />
-                                </View>
-                                {arrivalTime ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrivalTime)}>
-                                        <Icns type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </TouchableOpacity>
-                            {sTP && (
-                                <DateTimePicker
-                                    value={new Date()}
-                                    mode="time"
-                                    themeVariant="dark"
-                                    is24Hour={false}
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={hTC}
-                                />
-                            )}
-
-                            <Text style={styles.label}>Duration of the flight</Text>
-                            <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDurationPicker(true)}>
-                                <TextInput
-                                    style={[styles.input, {paddingLeft: 50}]}
-                                    placeholder="HH:MM"
-                                    placeholderTextColor="#999"
-                                    value={duration}
-                                    editable={false}
-                                />
-                                <View style={styles.dateIcon}>
-                                    <Icns type={'time'} />
-                                </View>
-                                {duration ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setDuration)}>
-                                        <Icns type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </TouchableOpacity>
-                            {showDurationPicker && (
-                                <DateTimePicker
-                                    value={new Date()}
-                                    mode="time"
-                                    themeVariant="dark"
-                                    is24Hour={false}
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleDurationChange}
-                                />
-                            )}
-                        </>
-                    )
-                }
-                {
-                    step === 4 && (
-                        <>
-                        <Text style={styles.label}>Flight cost</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    keyboardType='numeric'
-                                    placeholder="How much did you pay in $ ?"
-                                    placeholderTextColor="#999"
-                                    value={cost}
-                                    onChangeText={setCost}
-                                />
-                                {cost ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setCost)}>
-                                        <Icns type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </View>
-
-                        <Text style={styles.label}>Comment</Text>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Add comment to your flight"
-                                    placeholderTextColor="#999"
-                                    value={comment}
-                                    onChangeText={setComment}
-                                    multiline
-                                />
-                                {comment ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setComment)}>
-                                        <Icns type={'cross'} />
-                                    </TouchableOpacity>
-                                ) : null}
-                            </View>
-                        </>
-                    )
-                }
-
-                <View style={{height: 120}} />
-            </ScrollView>
-
-            <TouchableOpacity style={styles.saveBtn} onPress={handleNext}>
-                <Text style={styles.saveBtnText}>{step != 4 ? 'Next' : 'Save'}</Text>
-            </TouchableOpacity>
-
-        </View>
+        </ImageBackground>
     )
 };
 
@@ -462,7 +464,6 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         padding: 16,

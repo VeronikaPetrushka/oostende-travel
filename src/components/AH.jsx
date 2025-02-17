@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, ScrollView } from "react-native"
+import { View, Text, TouchableOpacity, Image, TextInput, Dimensions, StyleSheet, ScrollView, ImageBackground } from "react-native"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { launchImageLibrary } from 'react-native-image-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -118,169 +118,171 @@ const AH = ({ hotel }) => {
     };
     
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
 
-            <View style={styles.upperContainer}>
-                <TouchableOpacity style={styles.back} onPress={() => navigation.goBack('')}>
-                    <Icns type={'back'} light />
-                </TouchableOpacity>
-                <Text style={[styles.label, {marginBottom: 0, fontSize: 17, lineHeight: 22, color: '#ffcc02'}]}>Back</Text>
-            </View>
-
-            <Text style={styles.title}>Add a hotel</Text>
-
-            <ScrollView style={{width: '100%'}}>
-                <Text style={styles.label}>Name of the hotel</Text>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Name"
-                        placeholderTextColor="#999"
-                        value={name}
-                        onChangeText={setName}
-                    />
-                    {name ? (
-                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setName)}>
-                            <Icns type={'cross'} />
-                        </TouchableOpacity>
-                    ) : null}
+                <View style={styles.upperContainer}>
+                    <TouchableOpacity style={styles.back} onPress={() => navigation.goBack('')}>
+                        <Icns type={'back'} light />
+                    </TouchableOpacity>
+                    <Text style={[styles.label, {marginBottom: 0, fontSize: 17, lineHeight: 22, color: '#ffcc02'}]}>Back</Text>
                 </View>
 
-                <Text style={styles.label}>Description</Text>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Comment"
-                        placeholderTextColor="#999"
-                        value={description}
-                        onChangeText={setDescription}
-                        multiline
-                    />
-                    {description ? (
-                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setDescription)}>
-                            <Icns type={'cross'} />
-                        </TouchableOpacity>
-                    ) : null}
-                </View>
+                <Text style={styles.title}>Add a hotel</Text>
 
-                <Text style={styles.label}>Address of the hotel</Text>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Address"
-                        placeholderTextColor="#999"
-                        value={address}
-                        onChangeText={setAddress}
-                    />
-                    {address ? (
-                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setAddress)}>
-                            <Icns type={'cross'} />
-                        </TouchableOpacity>
-                    ) : null}
-                </View>
+                <ScrollView style={{width: '100%'}}>
+                    <Text style={styles.label}>Name of the hotel</Text>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Name"
+                            placeholderTextColor="#999"
+                            value={name}
+                            onChangeText={setName}
+                        />
+                        {name ? (
+                            <TouchableOpacity style={styles.cross} onPress={() => resIn(setName)}>
+                                <Icns type={'cross'} />
+                            </TouchableOpacity>
+                        ) : null}
+                    </View>
 
-                <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24}}>
-                    <View style={{width: '47%', alignItems: 'flex-start'}}>
-                        <Text style={styles.label}>Start date</Text>
-                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => sSDP(true)}>
-                            <TextInput
+                    <Text style={styles.label}>Description</Text>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Comment"
+                            placeholderTextColor="#999"
+                            value={description}
+                            onChangeText={setDescription}
+                            multiline
+                        />
+                        {description ? (
+                            <TouchableOpacity style={styles.cross} onPress={() => resIn(setDescription)}>
+                                <Icns type={'cross'} />
+                            </TouchableOpacity>
+                        ) : null}
+                    </View>
+
+                    <Text style={styles.label}>Address of the hotel</Text>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Address"
+                            placeholderTextColor="#999"
+                            value={address}
+                            onChangeText={setAddress}
+                        />
+                        {address ? (
+                            <TouchableOpacity style={styles.cross} onPress={() => resIn(setAddress)}>
+                                <Icns type={'cross'} />
+                            </TouchableOpacity>
+                        ) : null}
+                    </View>
+
+                    <View style={{width: '100%', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24}}>
+                        <View style={{width: '47%', alignItems: 'flex-start'}}>
+                            <Text style={styles.label}>Start date</Text>
+                            <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => sSDP(true)}>
+                                <TextInput
+                                        style={[styles.input, {paddingLeft: 40}]}
+                                        placeholder="DD.MM.YYYY"
+                                        placeholderTextColor="#999"
+                                        value={arrivalDate}
+                                        editable={false}
+                                    />
+                                    <View style={styles.dateIcon}>
+                                        <Icns type={'calendar'} />
+                                    </View>
+                                    {arrivalDate ? (
+                                        <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrivalDate)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    ) : null}
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{width: '47%', alignItems: 'flex-start'}}>
+                            <Text style={styles.label}>Finish date</Text>
+                            <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => sSDP(true)}>
+                                <TextInput
                                     style={[styles.input, {paddingLeft: 40}]}
                                     placeholder="DD.MM.YYYY"
                                     placeholderTextColor="#999"
-                                    value={arrivalDate}
+                                    value={departureDate}
                                     editable={false}
                                 />
                                 <View style={styles.dateIcon}>
                                     <Icns type={'calendar'} />
                                 </View>
-                                {arrivalDate ? (
-                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setArrivalDate)}>
+                                {departureDate ? (
+                                    <TouchableOpacity style={styles.cross} onPress={() => resIn(setDepartureDate)}>
                                         <Icns type={'cross'} />
                                     </TouchableOpacity>
                                 ) : null}
-                        </TouchableOpacity>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <View style={{width: '47%', alignItems: 'flex-start'}}>
-                        <Text style={styles.label}>Finish date</Text>
-                        <TouchableOpacity style={[styles.inputContainer, {marginBottom: 0}]} onPress={() => sSDP(true)}>
-                            <TextInput
-                                style={[styles.input, {paddingLeft: 40}]}
-                                placeholder="DD.MM.YYYY"
-                                placeholderTextColor="#999"
-                                value={departureDate}
-                                editable={false}
-                            />
-                            <View style={styles.dateIcon}>
-                                <Icns type={'calendar'} />
-                            </View>
-                            {departureDate ? (
-                                <TouchableOpacity style={styles.cross} onPress={() => resIn(setDepartureDate)}>
+                    {sDP && (
+                        <DateTimePicker
+                            value={new Date()}
+                            mode="date"
+                            themeVariant="dark"
+                            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                            onChange={hDC}
+                        />
+                    )}
+
+                    <Text style={styles.label}>Cover</Text>
+                    <View style={styles.coverContainer}>
+                        {cover ? (
+                            <>
+                                <Image source={{ uri: cover }} style={styles.uploadedImage} />
+                                <TouchableOpacity style={styles.crossImg} onPress={resIm}>
                                     <Icns type={'cross'} />
                                 </TouchableOpacity>
-                            ) : null}
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                {sDP && (
-                    <DateTimePicker
-                        value={new Date()}
-                        mode="date"
-                        themeVariant="dark"
-                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                        onChange={hDC}
-                    />
-                )}
-
-                <Text style={styles.label}>Cover</Text>
-                <View style={styles.coverContainer}>
-                    {cover ? (
-                        <>
-                            <Image source={{ uri: cover }} style={styles.uploadedImage} />
-                            <TouchableOpacity style={styles.crossImg} onPress={resIm}>
-                                <Icns type={'cross'} />
+                            </>
+                        ) : (
+                            <TouchableOpacity style={styles.add} onPress={handleCoverPicker}>
+                                <Icns type={'plus'} />
                             </TouchableOpacity>
-                        </>
-                    ) : (
-                        <TouchableOpacity style={styles.add} onPress={handleCoverPicker}>
-                            <Icns type={'plus'} />
-                        </TouchableOpacity>
-                    )}
-                </View>
+                        )}
+                    </View>
 
-                <Text style={styles.label}>Photos</Text>
-                    {images.length > 0 ? (
-                        <ScrollView horizontal>
-                            {images.map((image, index) => (
-                                <View key={index} style={styles.imageContainer}>
-                                    <Image source={{ uri: image }} style={styles.uploadedImage} />
-                                    <TouchableOpacity style={styles.crossImg} onPress={() => hImD(index)}>
-                                        <Icns type={'cross'} />
+                    <Text style={styles.label}>Photos</Text>
+                        {images.length > 0 ? (
+                            <ScrollView horizontal>
+                                {images.map((image, index) => (
+                                    <View key={index} style={styles.imageContainer}>
+                                        <Image source={{ uri: image }} style={styles.uploadedImage} />
+                                        <TouchableOpacity style={styles.crossImg} onPress={() => hImD(index)}>
+                                            <Icns type={'cross'} />
+                                        </TouchableOpacity>
+                                    </View>
+                                ))}
+                                <View style={styles.imageContainer}>
+                                    <TouchableOpacity style={styles.add} onPress={hImP}>
+                                        <Icns type={'plus'} />
                                     </TouchableOpacity>
                                 </View>
-                            ))}
+                            </ScrollView>
+                        ) : (
                             <View style={styles.imageContainer}>
                                 <TouchableOpacity style={styles.add} onPress={hImP}>
                                     <Icns type={'plus'} />
                                 </TouchableOpacity>
                             </View>
-                        </ScrollView>
-                    ) : (
-                        <View style={styles.imageContainer}>
-                            <TouchableOpacity style={styles.add} onPress={hImP}>
-                                <Icns type={'plus'} />
-                            </TouchableOpacity>
-                        </View>
-                    )}
+                        )}
 
-                <View style={{height: 120}} />
+                    <View style={{height: 120}} />
 
-            </ScrollView>
+                </ScrollView>
 
-            <TouchableOpacity style={styles.saveBtn} onPress={hS}>
-                <Text style={styles.saveBtnText}>Save</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.saveBtn} onPress={hS}>
+                    <Text style={styles.saveBtnText}>Save</Text>
+                </TouchableOpacity>
 
-        </View>
+                </View>
+        </ImageBackground>
     )
 };
 
@@ -288,7 +290,6 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
         padding: 16,

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Dimensions, StyleSheet, Linking } from "react-native"
+import { View, Text, TouchableOpacity, Dimensions, StyleSheet, Linking, ImageBackground } from "react-native"
 import Icns from './Icns';
 
 const { height } = Dimensions.get('window');
@@ -19,29 +19,31 @@ const Prfl = () => {
     };
     
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
 
-            <View style={styles.upperContainer}>
-                <Text style={styles.title}>Tools</Text>
-            </View>
-
-            <View style={{width: '100%', paddingHorizontal: 16}}>
-                <View style={styles.btn}>
-                    <Text style={styles.btnText}>Privacy Policy</Text>
-                    <TouchableOpacity style={styles.policyIcon} onPress={hpp}>
-                        <Icns type={'policy'} />
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.btn}>
-                    <Text style={styles.btnText}>Rate us</Text>
-                    <TouchableOpacity style={styles.policyIcon} onPress={hra}>
-                        <Icns type={'rate'} />
-                    </TouchableOpacity>
+                <View style={styles.upperContainer}>
+                    <Text style={styles.title}>Tools</Text>
                 </View>
 
-            </View>
+                <View style={{width: '100%', paddingHorizontal: 16}}>
+                    <View style={styles.btn}>
+                        <Text style={styles.btnText}>Privacy Policy</Text>
+                        <TouchableOpacity style={styles.policyIcon} onPress={hpp}>
+                            <Icns type={'policy'} />
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.btn}>
+                        <Text style={styles.btnText}>Rate us</Text>
+                        <TouchableOpacity style={styles.policyIcon} onPress={hra}>
+                            <Icns type={'rate'} />
+                        </TouchableOpacity>
+                    </View>
 
-        </View>
+                </View>
+
+            </View>
+        </ImageBackground>
     )
 };
 
@@ -49,7 +51,6 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#000',
         alignItems: 'center',
         justifyContent: 'flex-start'
     },

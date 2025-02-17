@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView } from "react-native";
+import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView, ImageBackground } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Icns from "./Icns";
@@ -158,46 +158,48 @@ const FvrtT = () => {
     );
 
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
 
-            <View style={{width: '100%', alignItems: 'center', paddingHorizontal: 16}}>
-                <View style={styles.upperPanel}>
-                    <Text style={styles.upperText}>Your Favorites</Text>
-                    <View style={{alignItems: 'center', flexDirection: 'row'}}>
-                        <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack('')}>
-                            <Icns type={'back'} />
+                <View style={{width: '100%', alignItems: 'center', paddingHorizontal: 16}}>
+                    <View style={styles.upperPanel}>
+                        <Text style={styles.upperText}>Your Favorites</Text>
+                        <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                            <TouchableOpacity style={styles.backIcon} onPress={() => navigation.goBack('')}>
+                                <Icns type={'back'} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <View style={styles.toolsContainer}>
+                        <TouchableOpacity style={[styles.toolBtn, button === 'Hotels' && {backgroundColor: '#ffcc02'}]}  onPress={() => setButton('Hotels')}>
+                            <Text style={styles.toolBtnText}>Hotels</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.toolBtn, button === 'Events' && {backgroundColor: '#ffcc02'}]}  onPress={() => setButton('Events')}>
+                            <Text style={styles.toolBtnText}>Events</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
 
-                <View style={styles.toolsContainer}>
-                    <TouchableOpacity style={[styles.toolBtn, button === 'Hotels' && {backgroundColor: '#ffcc02'}]}  onPress={() => setButton('Hotels')}>
-                        <Text style={styles.toolBtnText}>Hotels</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.toolBtn, button === 'Events' && {backgroundColor: '#ffcc02'}]}  onPress={() => setButton('Events')}>
-                        <Text style={styles.toolBtnText}>Events</Text>
-                    </TouchableOpacity>
+                        <ScrollView style={{ width: '100%', padding: 16}}>
+                            {filteredData.map((item, index) =>
+                                button === 'Hotels'
+                                    ? renderHotels(item, index)
+                                    : renderEvents(item, index)
+                            )}
+                            {
+                                filteredData.length === 0 && (
+                                    <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
+                                        <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24}} />
+                                        <Text style={styles.nothingText}>{`There aren’t any ${button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
+                                    </View>
+                                )
+                            }
+                            <View style={{ height: 120 }} />
+                        </ScrollView>
+
                 </View>
-            </View>
-
-                    <ScrollView style={{ width: '100%', padding: 16, backgroundColor: '#000' }}>
-                        {filteredData.map((item, index) =>
-                            button === 'Hotels'
-                                ? renderHotels(item, index)
-                                : renderEvents(item, index)
-                        )}
-                        {
-                            filteredData.length === 0 && (
-                                <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
-                                    <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24}} />
-                                    <Text style={styles.nothingText}>{`There aren’t any ${button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
-                                </View>
-                            )
-                        }
-                        <View style={{ height: 120 }} />
-                    </ScrollView>
-
-        </View>
+        </ImageBackground>
     )
 };
 
@@ -207,7 +209,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: height * 0.07,
         alignItems: 'center',
-        backgroundColor: '#000',
     },
 
     upperPanel: {

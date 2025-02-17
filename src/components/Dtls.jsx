@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, View, Text, ScrollView, Dimensions, StyleSheet, Image } from "react-native";
+import { TouchableOpacity, View, Text, ScrollView, Dimensions, StyleSheet, Image, ImageBackground } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import Icns from './Icns';
@@ -46,34 +46,36 @@ const Dtls = ({ place }) => {
     };
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack('')}>
-                <View style={{width: 17, height: 22, marginRight: 5}}>
-                    <Icns type={'back'} light />
-                </View>
-                <Text style={styles.backBtnText}>Back</Text>
-            </TouchableOpacity>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
+                <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack('')}>
+                    <View style={{width: 17, height: 22, marginRight: 5}}>
+                        <Icns type={'back'} light />
+                    </View>
+                    <Text style={styles.backBtnText}>Back</Text>
+                </TouchableOpacity>
 
-            <ScrollView style={{width: '100%'}}>
-                <Image source={place.image} style={styles.image} />
+                <ScrollView style={{width: '100%'}}>
+                    <Image source={place.image} style={styles.image} />
 
-                <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexDirection: 'row'}}>
-                    <Text style={styles.name}>{place.name}</Text>
-                    <TouchableOpacity style={{width: 31, height: 28}} onPress={() => sF(place)}>
-                        <Icns type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} light={favorites.some((fav) => fav.name === place.name)} />
-                    </TouchableOpacity>
-                </View>
+                    <View style={{width: '100%', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexDirection: 'row'}}>
+                        <Text style={styles.name}>{place.name}</Text>
+                        <TouchableOpacity style={{width: 31, height: 28}} onPress={() => sF(place)}>
+                            <Icns type={favorites.some((fav) => fav.name === place.name) ? 'fav-saved' : 'fav-not'} light={favorites.some((fav) => fav.name === place.name)} />
+                        </TouchableOpacity>
+                    </View>
 
-                <Text style={styles.subTitle}>Description</Text>
+                    <Text style={styles.subTitle}>Description</Text>
 
-                {
-                    place.description.map((desc, i) => (
-                        <Text index={i} style={styles.description}>{desc}</Text>
-                    ))
-                }
-            </ScrollView>
+                    {
+                        place.description.map((desc, i) => (
+                            <Text index={i} style={styles.description}>{desc}</Text>
+                        ))
+                    }
+                </ScrollView>
 
-        </View>
+            </View>
+        </ImageBackground>
     )
 };
 
@@ -83,7 +85,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: height * 0.13,
         padding: 16,
-        backgroundColor: '#000',
     },
 
     backBtn: {
@@ -130,7 +131,10 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: '400',
         lineHeight: 19.09,
-        marginBottom: 16
+        marginBottom: 16,
+        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+        padding: 10,
+        borderRadius: 12
     },
 
 })

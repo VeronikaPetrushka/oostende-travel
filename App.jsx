@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Animated, View, ImageBackground, StyleSheet } from 'react-native';
+import {View, Animated, Dimensions} from 'react-native';
 import { enableScreens } from 'react-native-screens';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -18,43 +18,100 @@ enableScreens();
 
 const Stack = createStackNavigator();
 
+const loaders = [
+    require('./src/assets/loaders/1.png'),
+    require('./src/assets/loaders/2.png'),
+  ];
+
 const App = () => {
-    const [loaderIsEnded, setLoaderIsEnded] = useState(false);
-
-    const loaderAnim = useRef(new Animated.Value(0)).current;
-
-    const loader = require('./src/assets/loader.png');
+    const [currentLoader, setCurrentLoader] = useState(0);
+    const slideAnimation1 = useRef(new Animated.Value(0)).current;
+    const slideAnimation2 = useRef(new Animated.Value(Dimensions.get('window').width)).current;
 
     useEffect(() => {
-        Animated.timing(loaderAnim, {
-            toValue: 1,
-            duration: 2000,
-            useNativeDriver: true,
-        }).start(() => {
-                setLoaderIsEnded(true);
-            });
+          const animationTimeout = setTimeout(() => {
+          slideToNextLoader();
+    }, 1500);
+
+    const navigation = setTimeout(() => {
+          navigateToMenu();
+          }, 4000);
+
+          return () => {
+                clearTimeout(animationTimeout);
+                clearTimeout(navigation);
+          };
     }, []);
-    
+
+    const slideToNextLoader = () => {
+          Animated.parallel([
+          Animated.timing(slideAnimation1, {
+                toValue: -Dimensions.get('window').width,
+                duration: 1500,
+                useNativeDriver: true,
+          }),
+          Animated.timing(slideAnimation2, {
+                toValue: 0,
+                duration: 1500,
+                useNativeDriver: true,
+                }),
+          ]).start(() => {
+                setCurrentLoader(1);
+          });
+    };
+
+    const navigateToMenu = () => {
+          setCurrentLoader(2);
+    };
+  
     return (
       <NavigationContainer>
-         {
-            !loaderIsEnded ? (
-                <View style={{ flex: 1 }}>
-                    <ImageBackground style={{ flex: 1 }} source={loader}>
-                        <View style={styles.container}>
-                            <Animated.View style={[styles.imageContainer, { opacity: loaderAnim }]}>
-                                <ImageBackground source={loader} style={styles.image} />
-                            </Animated.View>
-                        </View>
-                    </ImageBackground>
-                </View>
-            ) : (
-                <Stack.Navigator initialRouteName="HScrn">
-                    <Stack.Screen 
-                        name="HScrn" 
-                        component={HScrn} 
-                        options={{ headerShown: false }} 
+         <Stack.Navigator
+                screenOptions={{
+                headerShown: false,
+                animation: 'fade',
+                animationDuration: 1000,
+            }}>
+            {currentLoader < 2 ? (
+                <Stack.Screen name="Welcome" options={{ headerShown: false }}>
+                {() => (
+                    <View style={{ flex: 1, backgroundColor: '#000' }}>
+                    <Animated.Image
+                        source={loaders[0]}
+                        style={[
+                        { 
+                            width: '100%', 
+                            height: '100%', 
+                            position: 'absolute',
+                        },
+                        { 
+                            transform: [{ translateX: slideAnimation1 }],
+                        },
+                        ]}
                     />
+                    <Animated.Image
+                        source={loaders[1]}
+                        style={[
+                        { 
+                            width: '100%', 
+                            height: '100%', 
+                            position: 'absolute',
+                        },
+                        { 
+                            transform: [{ translateX: slideAnimation2 }],
+                        },
+                        ]}
+                    />
+                    </View>
+                )}
+                </Stack.Screen>
+            ) : (
+                <Stack.Screen 
+                    name="HScrn" 
+                    component={HScrn} 
+                    options={{ headerShown: false }} 
+                />
+            )}
                     <Stack.Screen 
                         name="DtlsScrn" 
                         component={DtlsScrn} 
@@ -96,28 +153,8 @@ const App = () => {
                         options={{ headerShown: false }} 
                     />
                 </Stack.Navigator>
-        )
-    }
       </NavigationContainer>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    imageContainer: {
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-    },
-    image: {
-        width: '100%',
-        height: '100%',
-        resizeMode: 'cover',
-    },
-});
 
 export default App;

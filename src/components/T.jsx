@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView, Modal } from "react-native";
+import { View, TouchableOpacity, Text, Image, StyleSheet, Dimensions, ScrollView, Modal, ImageBackground } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Icns from "./Icns";
@@ -334,81 +334,83 @@ const T = () => {
     );
 
     return (
-        <View style={styles.container}>
+        <ImageBackground source={require('../assets/back.png')} style={{flex: 1}}>
+            <View style={styles.container}>
 
-            <View style={{width: '100%', alignItems: 'center', paddingHorizontal: 16}}>
-                <View style={styles.upperPanel}>
-                    <Text style={styles.upperText}>Oostende Travel</Text>
-                    <View style={{alignItems: 'center', flexDirection: 'row'}}>
-                        <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FvrtTScrn')}>
-                            <Icns type={'fav'} />
+                <View style={{width: '100%', alignItems: 'center', paddingHorizontal: 16}}>
+                    <View style={styles.upperPanel}>
+                        <Text style={styles.upperText}>Oostende Travel</Text>
+                        <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                            <TouchableOpacity style={styles.favIcon} onPress={() => navigation.navigate('FvrtTScrn')}>
+                                <Icns type={'fav'} />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    <View style={styles.toolsContainer}>
+                        <TouchableOpacity style={[styles.toolBtn, button === 'Flights' && {backgroundColor: '#ffcc02'}]} onPress={() => setButton('Flights')}>
+                            <Text style={styles.toolBtnText}>Flights</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.toolBtn, button === 'Hotels' && {backgroundColor: '#ffcc02'}]}  onPress={() => setButton('Hotels')}>
+                            <Text style={styles.toolBtnText}>Hotels</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.toolBtn, button === 'Events' && {backgroundColor: '#ffcc02'}]}  onPress={() => setButton('Events')}>
+                            <Text style={styles.toolBtnText}>Events</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
 
-                <View style={styles.toolsContainer}>
-                    <TouchableOpacity style={[styles.toolBtn, button === 'Flights' && {backgroundColor: '#ffcc02'}]} onPress={() => setButton('Flights')}>
-                        <Text style={styles.toolBtnText}>Flights</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.toolBtn, button === 'Hotels' && {backgroundColor: '#ffcc02'}]}  onPress={() => setButton('Hotels')}>
-                        <Text style={styles.toolBtnText}>Hotels</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.toolBtn, button === 'Events' && {backgroundColor: '#ffcc02'}]}  onPress={() => setButton('Events')}>
-                        <Text style={styles.toolBtnText}>Events</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+                        <ScrollView style={{ width: '100%', padding: 16}}>
+                            {fBD.map((item, index) =>
+                                button === 'Flights'
+                                    ? renderFlights(item, index)
+                                    : button === 'Hotels'
+                                    ? renderHotels(item, index)
+                                    : renderEvents(item, index)
+                            )}
+                            {
+                                fBD.length === 0 && (
+                                    <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
+                                        <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24, resizeMode: 'contain'}} />
+                                        <Text style={styles.nothingText}>{`There aren’t any ${button === 'Flights' ? 'flights' : button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
+                                    </View>
+                                )
+                            }
+                            <View style={{ height: 120 }} />
+                        </ScrollView>
 
-                    <ScrollView style={{ width: '100%', padding: 16, backgroundColor: '#000' }}>
-                        {fBD.map((item, index) =>
-                            button === 'Flights'
-                                ? renderFlights(item, index)
-                                : button === 'Hotels'
-                                ? renderHotels(item, index)
-                                : renderEvents(item, index)
-                        )}
-                        {
-                            fBD.length === 0 && (
-                                <View style={{width: '100%', marginTop: 100, alignItems: 'center'}}>
-                                    <Image source={require('../assets/nothing.png')} style={{width: 120, height: 120, marginBottom: 24, resizeMode: 'contain'}} />
-                                    <Text style={styles.nothingText}>{`There aren’t any ${button === 'Flights' ? 'flights' : button === 'Hotels' ? 'hotels' : 'events'} you add yet, you can do it now`}</Text>
-                                </View>
-                            )
-                        }
-                        <View style={{ height: 120 }} />
-                    </ScrollView>
+                <TouchableOpacity style={styles.addBtn} onPress={hAI}>
+                    <Icns type={'plus'} />
+                </TouchableOpacity>
 
-            <TouchableOpacity style={styles.addBtn} onPress={hAI}>
-                <Icns type={'plus'} />
-            </TouchableOpacity>
-
-            <Modal
-                    transparent={true}
-                    animationType="fade"
-                    visible={deleteModalVisible}
-                    onRequestClose={() => setDeleteModalVisible(false)}
-                >
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <Text style={[styles.flightClass, {fontSize: 16, marginBottom: 16}]}>Last chance</Text>
-                            <Text style={styles.modalText}>Are you sure you want to delete this record ?</Text>
-                            <TouchableOpacity
-                                style={[styles.modalButton, {borderWidth: 1, borderColor: '#ff0e0a', width: '90%', borderRadius: 16, marginBottom: 7}]}
-                                onPress={deleteItem}
-                            >
-                                <Text style={styles.modalButtonText}>Delete</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={[styles.modalButton, { borderColor: '#ffcc02', backgroundColor: '#ffcc02', width: '90%', borderRadius: 16, marginBottom: 16}]}
-                                onPress={() => setDeleteModalVisible(false)}
-                            >
-                                <Text style={[styles.modalButtonText, {fontWeight: '500', color: '#000'}]}>Close</Text>
-                            </TouchableOpacity>
+                <Modal
+                        transparent={true}
+                        animationType="fade"
+                        visible={deleteModalVisible}
+                        onRequestClose={() => setDeleteModalVisible(false)}
+                    >
+                        <View style={styles.modalContainer}>
+                            <View style={styles.modalContent}>
+                                <Text style={[styles.flightClass, {fontSize: 16, marginBottom: 16}]}>Last chance</Text>
+                                <Text style={styles.modalText}>Are you sure you want to delete this record ?</Text>
+                                <TouchableOpacity
+                                    style={[styles.modalButton, {borderWidth: 1, borderColor: '#ff0e0a', width: '90%', borderRadius: 16, marginBottom: 7}]}
+                                    onPress={deleteItem}
+                                >
+                                    <Text style={styles.modalButtonText}>Delete</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={[styles.modalButton, { borderColor: '#ffcc02', backgroundColor: '#ffcc02', width: '90%', borderRadius: 16, marginBottom: 16}]}
+                                    onPress={() => setDeleteModalVisible(false)}
+                                >
+                                    <Text style={[styles.modalButtonText, {fontWeight: '500', color: '#000'}]}>Close</Text>
+                                </TouchableOpacity>
+                            </View>
                         </View>
-                    </View>
-                </Modal>
+                    </Modal>
 
-        </View>
+                </View>
+        </ImageBackground>
     )
 };
 
@@ -418,7 +420,6 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: height * 0.07,
         alignItems: 'center',
-        backgroundColor: '#000'
     },
 
     upperPanel: {
